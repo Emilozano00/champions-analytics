@@ -1,0 +1,568 @@
+{
+  "walk_forward_results": {
+    "Split 1: Train 2023 \u2192 Val early 2024": {
+      "Baseline (always H)": {
+        "accuracy": 0.5,
+        "log_loss": 18.0218,
+        "f1_macro": 0.2222,
+        "confusion_matrix": [
+          [
+            0,
+            0,
+            41
+          ],
+          [
+            0,
+            0,
+            26
+          ],
+          [
+            0,
+            0,
+            67
+          ]
+        ],
+        "calibration": {
+          "A": {
+            "predicted_prob": 0.0,
+            "actual_freq": 0.306
+          },
+          "D": {
+            "predicted_prob": 0.0,
+            "actual_freq": 0.194
+          },
+          "H": {
+            "predicted_prob": 1.0,
+            "actual_freq": 0.5
+          }
+        }
+      },
+      "Random Forest": {
+        "accuracy": 0.4925,
+        "log_loss": 1.0414,
+        "f1_macro": 0.4069,
+        "confusion_matrix": [
+          [
+            20,
+            6,
+            15
+          ],
+          [
+            10,
+            3,
+            13
+          ],
+          [
+            17,
+            7,
+            43
+          ]
+        ],
+        "calibration": {
+          "A": {
+            "predicted_prob": 0.3268,
+            "actual_freq": 0.306
+          },
+          "D": {
+            "predicted_prob": 0.2745,
+            "actual_freq": 0.194
+          },
+          "H": {
+            "predicted_prob": 0.3987,
+            "actual_freq": 0.5
+          }
+        }
+      },
+      "HistGradientBoosting": {
+        "accuracy": 0.4851,
+        "log_loss": 2.5458,
+        "f1_macro": 0.3838,
+        "confusion_matrix": [
+          [
+            19,
+            3,
+            19
+          ],
+          [
+            9,
+            2,
+            15
+          ],
+          [
+            20,
+            3,
+            44
+          ]
+        ],
+        "calibration": {
+          "A": {
+            "predicted_prob": 0.3632,
+            "actual_freq": 0.306
+          },
+          "D": {
+            "predicted_prob": 0.1078,
+            "actual_freq": 0.194
+          },
+          "H": {
+            "predicted_prob": 0.529,
+            "actual_freq": 0.5
+          }
+        }
+      },
+      "Logistic Regression": {
+        "accuracy": 0.3507,
+        "log_loss": 2.321,
+        "f1_macro": 0.3423,
+        "confusion_matrix": [
+          [
+            14,
+            19,
+            8
+          ],
+          [
+            11,
+            10,
+            5
+          ],
+          [
+            18,
+            26,
+            23
+          ]
+        ],
+        "calibration": {
+          "A": {
+            "predicted_prob": 0.3179,
+            "actual_freq": 0.306
+          },
+          "D": {
+            "predicted_prob": 0.3861,
+            "actual_freq": 0.194
+          },
+          "H": {
+            "predicted_prob": 0.296,
+            "actual_freq": 0.5
+          }
+        }
+      }
+    },
+    "Split 2: Train 2023+early2024 \u2192 Val late 2024": {
+      "Baseline (always H)": {
+        "accuracy": 0.5037,
+        "log_loss": 17.8883,
+        "f1_macro": 0.2233,
+        "confusion_matrix": [
+          [
+            0,
+            0,
+            50
+          ],
+          [
+            0,
+            0,
+            17
+          ],
+          [
+            0,
+            0,
+            68
+          ]
+        ],
+        "calibration": {
+          "A": {
+            "predicted_prob": 0.0,
+            "actual_freq": 0.3704
+          },
+          "D": {
+            "predicted_prob": 0.0,
+            "actual_freq": 0.1259
+          },
+          "H": {
+            "predicted_prob": 1.0,
+            "actual_freq": 0.5037
+          }
+        }
+      },
+      "Random Forest": {
+        "accuracy": 0.5704,
+        "log_loss": 0.9526,
+        "f1_macro": 0.4395,
+        "confusion_matrix": [
+          [
+            32,
+            2,
+            16
+          ],
+          [
+            2,
+            1,
+            14
+          ],
+          [
+            20,
+            4,
+            44
+          ]
+        ],
+        "calibration": {
+          "A": {
+            "predicted_prob": 0.3221,
+            "actual_freq": 0.3704
+          },
+          "D": {
+            "predicted_prob": 0.2603,
+            "actual_freq": 0.1259
+          },
+          "H": {
+            "predicted_prob": 0.4176,
+            "actual_freq": 0.5037
+          }
+        }
+      },
+      "HistGradientBoosting": {
+        "accuracy": 0.4889,
+        "log_loss": 2.0599,
+        "f1_macro": 0.3864,
+        "confusion_matrix": [
+          [
+            19,
+            8,
+            23
+          ],
+          [
+            0,
+            2,
+            15
+          ],
+          [
+            17,
+            6,
+            45
+          ]
+        ],
+        "calibration": {
+          "A": {
+            "predicted_prob": 0.2738,
+            "actual_freq": 0.3704
+          },
+          "D": {
+            "predicted_prob": 0.1111,
+            "actual_freq": 0.1259
+          },
+          "H": {
+            "predicted_prob": 0.6152,
+            "actual_freq": 0.5037
+          }
+        }
+      },
+      "Logistic Regression": {
+        "accuracy": 0.4815,
+        "log_loss": 1.0398,
+        "f1_macro": 0.4389,
+        "confusion_matrix": [
+          [
+            28,
+            14,
+            8
+          ],
+          [
+            2,
+            6,
+            9
+          ],
+          [
+            20,
+            17,
+            31
+          ]
+        ],
+        "calibration": {
+          "A": {
+            "predicted_prob": 0.3275,
+            "actual_freq": 0.3704
+          },
+          "D": {
+            "predicted_prob": 0.317,
+            "actual_freq": 0.1259
+          },
+          "H": {
+            "predicted_prob": 0.3555,
+            "actual_freq": 0.5037
+          }
+        }
+      }
+    },
+    "Split 3: Train 2023+2024 \u2192 Val 2025": {
+      "Baseline (always H)": {
+        "accuracy": 0.4916,
+        "log_loss": 18.3247,
+        "f1_macro": 0.2197,
+        "confusion_matrix": [
+          [
+            0,
+            0,
+            78
+          ],
+          [
+            0,
+            0,
+            43
+          ],
+          [
+            0,
+            0,
+            117
+          ]
+        ],
+        "calibration": {
+          "A": {
+            "predicted_prob": 0.0,
+            "actual_freq": 0.3277
+          },
+          "D": {
+            "predicted_prob": 0.0,
+            "actual_freq": 0.1807
+          },
+          "H": {
+            "predicted_prob": 1.0,
+            "actual_freq": 0.4916
+          }
+        }
+      },
+      "Random Forest": {
+        "accuracy": 0.4832,
+        "log_loss": 1.0495,
+        "f1_macro": 0.3611,
+        "confusion_matrix": [
+          [
+            35,
+            8,
+            35
+          ],
+          [
+            19,
+            1,
+            23
+          ],
+          [
+            32,
+            6,
+            79
+          ]
+        ],
+        "calibration": {
+          "A": {
+            "predicted_prob": 0.3447,
+            "actual_freq": 0.3277
+          },
+          "D": {
+            "predicted_prob": 0.2385,
+            "actual_freq": 0.1807
+          },
+          "H": {
+            "predicted_prob": 0.4168,
+            "actual_freq": 0.4916
+          }
+        }
+      },
+      "HistGradientBoosting": {
+        "accuracy": 0.5084,
+        "log_loss": 1.9741,
+        "f1_macro": 0.3835,
+        "confusion_matrix": [
+          [
+            24,
+            7,
+            47
+          ],
+          [
+            14,
+            4,
+            25
+          ],
+          [
+            20,
+            4,
+            93
+          ]
+        ],
+        "calibration": {
+          "A": {
+            "predicted_prob": 0.2745,
+            "actual_freq": 0.3277
+          },
+          "D": {
+            "predicted_prob": 0.0937,
+            "actual_freq": 0.1807
+          },
+          "H": {
+            "predicted_prob": 0.6318,
+            "actual_freq": 0.4916
+          }
+        }
+      },
+      "Logistic Regression": {
+        "accuracy": 0.395,
+        "log_loss": 1.1714,
+        "f1_macro": 0.3813,
+        "confusion_matrix": [
+          [
+            29,
+            30,
+            19
+          ],
+          [
+            15,
+            18,
+            10
+          ],
+          [
+            29,
+            41,
+            47
+          ]
+        ],
+        "calibration": {
+          "A": {
+            "predicted_prob": 0.3246,
+            "actual_freq": 0.3277
+          },
+          "D": {
+            "predicted_prob": 0.3474,
+            "actual_freq": 0.1807
+          },
+          "H": {
+            "predicted_prob": 0.328,
+            "actual_freq": 0.4916
+          }
+        }
+      }
+    }
+  },
+  "averages": {
+    "Baseline (always H)": {
+      "avg_accuracy": 0.4984,
+      "avg_log_loss": 18.0783,
+      "avg_f1_macro": 0.2217
+    },
+    "Random Forest": {
+      "avg_accuracy": 0.5154,
+      "avg_log_loss": 1.0145,
+      "avg_f1_macro": 0.4025
+    },
+    "HistGradientBoosting": {
+      "avg_accuracy": 0.4941,
+      "avg_log_loss": 2.1933,
+      "avg_f1_macro": 0.3846
+    },
+    "Logistic Regression": {
+      "avg_accuracy": 0.4091,
+      "avg_log_loss": 1.5107,
+      "avg_f1_macro": 0.3875
+    }
+  },
+  "feature_importance_top15": [
+    {
+      "feature": "home_days_since_last",
+      "importance": 0.013681
+    },
+    {
+      "feature": "home_rolling_pass_accuracy",
+      "importance": 0.007334
+    },
+    {
+      "feature": "away_rolling_goals_for",
+      "importance": 0.006629
+    },
+    {
+      "feature": "home_rolling_points",
+      "importance": 0.006065
+    },
+    {
+      "feature": "home_rolling_goals_for",
+      "importance": 0.005924
+    },
+    {
+      "feature": "home_rolling_corners",
+      "importance": 0.005783
+    },
+    {
+      "feature": "away_days_since_last",
+      "importance": 0.005501
+    },
+    {
+      "feature": "away_rolling_possession",
+      "importance": 0.00409
+    },
+    {
+      "feature": "diff_rolling_form",
+      "importance": 0.003385
+    },
+    {
+      "feature": "away_rolling_goals_against",
+      "importance": 0.002962
+    },
+    {
+      "feature": "away_rolling_avg_rating",
+      "importance": 0.002821
+    },
+    {
+      "feature": "away_rolling_xg_diff",
+      "importance": 0.00268
+    },
+    {
+      "feature": "home_rolling_avg_rating",
+      "importance": 0.00268
+    },
+    {
+      "feature": "away_rolling_corners",
+      "importance": 0.002398
+    },
+    {
+      "feature": "diff_rolling_goals",
+      "importance": 0.001975
+    }
+  ],
+  "features_used": [
+    "home_rolling_xg_for",
+    "home_rolling_xg_against",
+    "home_rolling_xg_diff",
+    "home_rolling_goals_for",
+    "home_rolling_goals_against",
+    "home_rolling_xg_overperformance",
+    "home_rolling_shots_on_goal",
+    "home_rolling_shots_accuracy",
+    "home_rolling_possession",
+    "home_rolling_pass_accuracy",
+    "home_rolling_corners",
+    "home_rolling_avg_rating",
+    "home_rolling_key_passes",
+    "home_rolling_duels_won_pct",
+    "home_rolling_dribbles_success",
+    "home_rolling_points",
+    "away_rolling_xg_for",
+    "away_rolling_xg_against",
+    "away_rolling_xg_diff",
+    "away_rolling_goals_for",
+    "away_rolling_goals_against",
+    "away_rolling_xg_overperformance",
+    "away_rolling_shots_on_goal",
+    "away_rolling_shots_accuracy",
+    "away_rolling_possession",
+    "away_rolling_pass_accuracy",
+    "away_rolling_corners",
+    "away_rolling_avg_rating",
+    "away_rolling_key_passes",
+    "away_rolling_duels_won_pct",
+    "away_rolling_dribbles_success",
+    "away_rolling_points",
+    "diff_rolling_xg",
+    "diff_rolling_goals",
+    "diff_rolling_form",
+    "is_knockout",
+    "home_days_since_last",
+    "away_days_since_last"
+  ],
+  "n_features": 38,
+  "n_matches": 709
+}
