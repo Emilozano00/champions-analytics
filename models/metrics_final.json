@@ -1,0 +1,54 @@
+{
+  "model": "LogReg tuned + cal(sigmoid)",
+  "n_features": 20,
+  "features": [
+    "home_rolling_points",
+    "elo_diff",
+    "home_domestic_home_goals_avg",
+    "elo_home",
+    "elo_away",
+    "away_domestic_xg_against_last5",
+    "home_rolling_shots_accuracy",
+    "home_rolling_avg_rating",
+    "home_rolling_corners",
+    "home_rolling_duels_won_pct",
+    "away_rolling_duels_won_pct",
+    "away_rolling_xg_overperformance",
+    "home_rolling_key_passes",
+    "home_rolling_pass_accuracy",
+    "away_rolling_goals_for",
+    "home_rolling_xg_diff",
+    "away_domestic_away_goals_avg",
+    "away_rolling_corners",
+    "home_days_since_last",
+    "away_rolling_points"
+  ],
+  "accuracy": 0.5721,
+  "log_loss": 0.9331,
+  "f1_macro": 0.4029,
+  "delta_accuracy_vs_v3": 0.0352,
+  "delta_log_loss_vs_v3": -0.0334,
+  "training_accuracy": 0.5839,
+  "best_params": {
+    "Random Forest": "{'clf__class_weight': None, 'clf__max_depth': 15, 'clf__min_samples_leaf': 5, 'clf__n_estimators': 200}",
+    "HistGradientBoosting": "{'clf__learning_rate': 0.01, 'clf__max_depth': 3, 'clf__max_iter': 200, 'clf__min_samples_leaf': 10}",
+    "Logistic Regression": "{'clf__C': 0.01, 'clf__class_weight': None, 'clf__penalty': 'l2'}"
+  },
+  "per_split": [
+    {
+      "accuracy": 0.5597014925373134,
+      "log_loss": 0.951368123854506,
+      "f1_macro": 0.3988641648919244
+    },
+    {
+      "accuracy": 0.5851851851851851,
+      "log_loss": 0.893323093046734,
+      "f1_macro": 0.4078674948240166
+    },
+    {
+      "accuracy": 0.5714285714285714,
+      "log_loss": 0.9544701189909103,
+      "f1_macro": 0.4019871023481132
+    }
+  ]
+}

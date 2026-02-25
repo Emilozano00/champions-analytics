@@ -1,7 +1,7 @@
 """
 ⚽ Champions League Predictor
 Streamlit app for Champions League match outcome prediction.
-Uses model v3: ELO ratings + top domestic features (47 variables).
+Uses final model: Logistic Regression calibrada, 20 features, accuracy 57.2%.
 """
 
 import json
@@ -36,9 +36,9 @@ PROCESSED_DIR = DATA_DIR / "processed"
 
 @st.cache_resource
 def load_model():
-    model = joblib.load(MODELS_DIR / "champion_model_v3.pkl")
+    model = joblib.load(MODELS_DIR / "champion_model_final.pkl")
     le = joblib.load(MODELS_DIR / "label_encoder.pkl")
-    with open(MODELS_DIR / "feature_list_v3.json") as f:
+    with open(MODELS_DIR / "feature_list_final.json") as f:
         feature_list = json.load(f)
     return model, le, feature_list
 
@@ -60,8 +60,8 @@ def load_metrics():
 
 
 @st.cache_data
-def load_metrics_v3():
-    with open(MODELS_DIR / "metrics_v3.json") as f:
+def load_metrics_final():
+    with open(MODELS_DIR / "metrics_final.json") as f:
         return json.load(f)
 
 
@@ -366,7 +366,7 @@ model, le, feature_list = load_model()
 features_df = load_features()
 matches_df = load_matches()
 metrics = load_metrics()
-metrics_v3 = load_metrics_v3()
+metrics_final = load_metrics_final()
 upcoming_df = load_upcoming_fixtures()
 odds_data = load_odds()
 
@@ -643,13 +643,11 @@ with tab3:
         "pero no es infalible. Úsalo como **una herramienta más**, no como verdad absoluta."
     )
 
-    # v3 headline metrics
-    best_acc = metrics_v3["accuracy"]
-    best_ll = metrics_v3["log_loss"]
+    # Final model headline metrics
+    best_acc = metrics_final["accuracy"]
+    best_ll = metrics_final["log_loss"]
     baseline_acc = metrics["averages"]["Baseline (always H)"]["avg_accuracy"]
     improvement = best_acc - baseline_acc
-    v1_acc = metrics_v3["per_variant"]["A"]["accuracy"]
-    elo_improvement = best_acc - v1_acc
 
     # Key metrics
     col1, col2, col3 = st.columns(3)
@@ -658,27 +656,30 @@ with tab3:
     with col2:
         st.metric("Partidos Analizados", "709")
     with col3:
-        st.metric("Variables del Modelo", "47", f"+9 vs v1 (ELO + domestic)")
+        st.metric("Variables del Modelo", f"{metrics_final['n_features']}", "seleccionadas de 47")
 
-    st.markdown(f"Acierta el resultado en **{best_acc*10:.1f} de cada 10 partidos**.")
+    st.markdown(f"Acierta el resultado en **casi 6 de cada 10 partidos**.")
     st.markdown(f"Si siempre apostáramos al equipo local, acertaríamos un {baseline_acc:.0%}. Nuestro modelo mejora esto en **{improvement:.0%}**.")
-    st.markdown(f"La incorporación de ELO ratings y datos domésticos mejoró la precisión en **+{elo_improvement:.1%}** y redujo el log loss a **{best_ll:.3f}**.")
+    st.markdown(f"Logistic Regression calibrada con las **{metrics_final['n_features']} variables más predictivas** — incluyendo ELO ratings, datos domésticos y stats de Champions League. Log loss: **{best_ll:.3f}**.")
 
     # Walk-forward results (from original metrics.json for split details)
     st.subheader("Resultados por Periodo (Walk-Forward)")
     st.markdown("Evaluamos el modelo de forma temporal: entrenamos con datos pasados y probamos con datos futuros, simulando uso real.")
 
     wf_data = []
+    split_names = ["Split 1", "Split 2", "Split 3"]
+    baselines = []
     for split_name, split_results in metrics["walk_forward_results"].items():
-        short_name = split_name.split(":")[0]
-        rf = split_results.get("Random Forest", {})
         bl = split_results.get("Baseline (always H)", {})
+        baselines.append(bl.get("accuracy", 0))
+    for i, ps in enumerate(metrics_final.get("per_split", [])):
+        bl_acc = baselines[i] if i < len(baselines) else 0
         wf_data.append({
-            "Periodo": short_name,
-            "Modelo": f"{rf.get('accuracy', 0):.0%}",
-            "Baseline": f"{bl.get('accuracy', 0):.0%}",
-            "Log Loss": f"{rf.get('log_loss', 0):.3f}",
-            "F1 Macro": f"{rf.get('f1_macro', 0):.3f}",
+            "Periodo": split_names[i],
+            "Modelo": f"{ps['accuracy']:.0%}",
+            "Baseline": f"{bl_acc:.0%}",
+            "Log Loss": f"{ps['log_loss']:.3f}",
+            "F1 Macro": f"{ps['f1_macro']:.3f}",
         })
     st.dataframe(pd.DataFrame(wf_data), height=145)
 
@@ -715,40 +716,41 @@ with tab3:
     st.subheader("Rendimiento por Fase")
 
     phase_data = pd.DataFrame([
-        {"Fase": "Clasificación", "Precisión": "~53%", "Nota": "Más predecible — equipos con diferencias claras de nivel"},
-        {"Fase": "Fase de Grupos / Liga", "Precisión": "~50%", "Nota": "Rendimiento sólido en la fase principal"},
-        {"Fase": "Eliminatorias", "Precisión": "~43%", "Nota": "Más difícil — partidos cerrados, factor emocional alto"},
+        {"Fase": "Clasificación", "Precisión": "~56%", "Nota": "Más predecible — equipos con diferencias claras de nivel"},
+        {"Fase": "Fase de Grupos / Liga", "Precisión": "~61%", "Nota": "Mejor rendimiento — datos suficientes para capturar patrones"},
+        {"Fase": "Eliminatorias", "Precisión": "~46%", "Nota": "Más difícil — partidos cerrados, factor emocional alto"},
     ])
     st.dataframe(phase_data, height=145)
 
-    # Feature importance (from v3)
+    # Feature importance (from final model — features ordered by permutation importance)
     st.subheader("¿Qué factores importan más?")
-    st.markdown("Las variables que más influyen en las predicciones del modelo v3:")
+    st.markdown("Las 10 variables más importantes del modelo (ordenadas por impacto en la predicción):")
 
     feat_explanations = {
+        "home_rolling_points": ("Puntos recientes (local)", "La forma reciente del equipo local en Champions League — la variable #1"),
         "elo_diff": ("Diferencia de ELO", "ELO Rating: Un número que resume la fuerza histórica del equipo. Equipos con más victorias y contra mejores rivales tienen ELO más alto."),
-        "elo_expected_home": ("Probabilidad esperada por ELO", "Probabilidad teórica de victoria local basada en la diferencia de fuerza entre ambos equipos"),
+        "home_domestic_home_goals_avg": ("Goles en casa (liga doméstica)", "Promedio de goles como local en su liga doméstica — indica poder ofensivo en casa"),
         "elo_home": ("ELO del equipo local", "La fuerza histórica acumulada del equipo local, basada en todos sus resultados pasados"),
         "elo_away": ("ELO del equipo visitante", "La fuerza histórica acumulada del equipo visitante"),
-        "home_domestic_home_goals_avg": ("Goles en casa (liga doméstica)", "Promedio de goles como local en su liga doméstica — indica poder ofensivo en casa"),
         "away_domestic_xg_against_last5": ("xG en contra reciente (liga visitante)", "Goles esperados en contra en los últimos 5 partidos de liga del visitante"),
+        "home_rolling_shots_accuracy": ("Precisión de tiros (local)", "Porcentaje de tiros que van a puerta — eficiencia ofensiva"),
+        "home_rolling_avg_rating": ("Rating promedio (local)", "Calificación promedio de jugadores locales en partidos recientes"),
+        "home_rolling_corners": ("Córners recientes (local)", "Presión ofensiva del equipo local medida en córners"),
+        "home_rolling_duels_won_pct": ("Duelos ganados (local)", "Porcentaje de duelos individuales ganados — intensidad competitiva"),
+        "away_rolling_duels_won_pct": ("Duelos ganados (visitante)", "Porcentaje de duelos individuales ganados por el visitante"),
+        "away_rolling_xg_overperformance": ("Sobrerendimiento xG (visitante)", "Diferencia entre goles reales y esperados del visitante"),
+        "home_rolling_key_passes": ("Pases clave (local)", "Pases que crean oportunidades de gol"),
+        "home_rolling_pass_accuracy": ("Precisión de pases (local)", "Equipos que conectan pases tienden a controlar partidos"),
+        "away_rolling_goals_for": ("Goles recientes (visitante)", "El poder ofensivo reciente del equipo visitante"),
+        "home_rolling_xg_diff": ("Diferencia xG (local)", "Diferencia entre goles esperados a favor y en contra"),
         "away_domestic_away_goals_avg": ("Goles de visita (liga doméstica)", "Promedio de goles como visitante en su liga doméstica"),
-        "home_domestic_goals_against_last5": ("Goles recibidos (liga local)", "Goles recibidos en los últimos 5 partidos de liga del equipo local"),
-        "home_domestic_league_position": ("Posición en liga doméstica", "Posición actual en la tabla de su liga doméstica"),
-        "home_rolling_points": ("Puntos recientes (local)", "La forma reciente del equipo local en Champions League"),
-        "away_rolling_goals_for": ("Goles recientes del visitante", "El poder ofensivo reciente del equipo visitante en Champions"),
-        "home_rolling_pass_accuracy": ("Precisión de pases reciente (local)", "Equipos que conectan pases tienden a controlar partidos"),
-        "away_rolling_possession": ("Posesión reciente (visitante)", "Control del balón del equipo visitante en sus últimos 5 partidos"),
-        "away_rolling_corners": ("Córners recientes (visitante)", "Presión ofensiva del visitante medida en córners"),
-        "home_rolling_possession": ("Posesión reciente (local)", "Control del balón del equipo local"),
-        "away_rolling_avg_rating": ("Rating promedio (visitante)", "Calificación promedio de jugadores visitantes"),
-        "home_rolling_avg_rating": ("Rating promedio (local)", "Calificación promedio de jugadores locales"),
-        "home_days_since_last": ("Días desde el último partido (local)", "El descanso entre partidos afecta el rendimiento"),
+        "away_rolling_corners": ("Córners recientes (visitante)", "Presión ofensiva del visitante"),
+        "home_days_since_last": ("Días de descanso (local)", "El descanso entre partidos afecta el rendimiento"),
+        "away_rolling_points": ("Puntos recientes (visitante)", "La forma reciente del visitante en Champions"),
     }
 
-    top_features = metrics_v3.get("feature_importance_top15", [])[:10]
-    for i, feat in enumerate(top_features, 1):
-        fname = feat["feature"]
+    # feature_list is ordered by importance (from Phase 1 ranking)
+    for i, fname in enumerate(feature_list[:10], 1):
         explanation = feat_explanations.get(fname, (fname, ""))
         tag = ""
         if "elo" in fname:
@@ -772,28 +774,26 @@ with tab4:
     - **Datos de ligas domésticas** — rendimiento de cada equipo en su liga local
     """)
 
-    st.subheader("Variables del modelo (47 total)")
+    st.subheader("Variables del modelo (20 seleccionadas)")
     st.markdown("""
-    **Rolling Champions League (32 variables)** — promedio de los últimos 5 partidos de Champions:
+    De un universo de 47 variables candidatas, un proceso de selección automatizado eligió las **20 más predictivas**:
 
-    *Ofensivas:* Goles esperados (xG), goles anotados, tiros a puerta, precisión de tiros, regates exitosos, pases clave
+    **Champions League (13 variables)** — promedio de los últimos 5 partidos:
+    Puntos (forma), precisión de tiros, rating de jugadores, córners, duelos ganados,
+    sobrerendimiento xG, pases clave, precisión de pases, goles del visitante, diferencia xG,
+    córners del visitante, días de descanso, puntos del visitante
 
-    *Defensivas:* Goles recibidos, tackles, intercepciones, duelos ganados
+    **ELO Ratings (3 variables):**
+    Diferencia de ELO (la variable #2 del modelo), ELO del local, ELO del visitante.
+    El ELO resume la fuerza histórica de un equipo — equipos con más victorias
+    contra mejores rivales tienen ELO más alto.
 
-    *Generales:* Posesión, precisión de pases, córners, puntos recientes (forma), calificación promedio de jugadores
+    **Liga doméstica (4 variables):**
+    Goles en casa, goles de visita, xG en contra, todas de la liga local de cada equipo.
+    Capturan cómo rinde el equipo fuera de Champions League.
 
-    **Contextuales (6 variables):**
-    Días de descanso (local/visitante), si es partido de eliminatoria, diferencias rolling (xG, goles, forma)
-
-    **ELO Ratings (4 variables):**
-    ELO del local, ELO del visitante, diferencia de ELO, probabilidad esperada por ELO.
-    El ELO es un sistema de puntuación que resume la fuerza histórica de un equipo.
-    Equipos con más victorias y contra mejores rivales acumulan un ELO más alto.
-    Es la variable más importante del modelo.
-
-    **Liga doméstica (5 variables):**
-    Goles en casa/fuera, goles recibidos, xG en contra, y posición en la tabla de la liga local.
-    Capturan el rendimiento del equipo fuera de Champions League.
+    *Las 27 variables descartadas (posesión, intercepciones, tackles, etc.) fueron eliminadas
+    por agregar más ruido que señal con solo 709 partidos de muestra.*
     """)
 
     st.subheader("ELO Ratings")
@@ -823,14 +823,17 @@ with tab4:
 
     st.subheader("Evolución del modelo")
     st.markdown("""
-    | Versión | Variables | Precisión | Cambio |
-    |---------|-----------|-----------|--------|
-    | v1 (base) | 38 (rolling CL) | 51.5% | — |
-    | v2 (+ domestic) | 59 (+ 21 domésticas) | 49.9% | -1.6% (descartado) |
-    | **v3 (+ ELO + top domestic)** | **47 (+ 4 ELO + 5 domestic)** | **53.7%** | **+2.2%** |
+    | Versión | Algoritmo | Variables | Precisión | Cambio |
+    |---------|-----------|-----------|-----------|--------|
+    | v1 (base) | Random Forest | 38 (rolling CL) | 51.5% | — |
+    | v2 (+ domestic) | Random Forest | 59 (+ 21 domésticas) | 49.9% | -1.6% (descartado) |
+    | v3 (+ ELO) | Random Forest | 47 (+ 4 ELO + 5 domestic) | 53.7% | +2.2% |
+    | **Final** | **LogReg calibrada** | **20 (seleccionadas)** | **57.2%** | **+5.7%** |
 
-    La v2 demostró que agregar muchas features domésticas genera ruido con solo 709 muestras.
-    La v3 usa solo las 5 mejores features domésticas combinadas con ELO, logrando la mejor precisión.
+    La v2 demostró que agregar muchas features genera ruido con solo 709 muestras.
+    La v3 incorporó ELO como variable clave. El modelo final aplicó feature selection agresiva (de 47 a 20),
+    hyperparameter tuning, y calibración de probabilidades, logrando el mejor rendimiento.
+    Curiosamente, una Logistic Regression bien tuneada superó a Random Forest y a ensembles más complejos (Stacking, Voting).
     """)
 
     st.subheader("¿Qué NO puede hacer el modelo?")
@@ -844,19 +847,20 @@ with tab4:
 
     st.subheader("Modelo técnico")
     st.markdown(f"""
-    - **Algoritmo:** Random Forest (scikit-learn, 300 árboles)
-    - **Features:** 47 variables (32 rolling CL + 6 contextuales + 4 ELO + 5 domésticas)
+    - **Algoritmo:** Logistic Regression calibrada (Platt scaling) con regularización L2 (C=0.01)
+    - **Features:** {metrics_final['n_features']} variables seleccionadas (13 rolling CL + 3 ELO + 4 domésticas)
     - **Precisión promedio:** {best_acc:.1%} en walk-forward validation
     - **Log loss:** {best_ll:.3f}
-    - **Mejor que el baseline** (siempre apostar al local: ~50%)
-    - **ELO como variable #1** — la diferencia de fuerza histórica es el mejor predictor
+    - **Mejor que el baseline** (siempre apostar al local: ~50%) por **+{improvement:.0%}**
+    - **Feature selection:** Permutation importance redujo de 47 a 20 variables, eliminando ruido
+    - **Calibración:** Sigmoid (Platt scaling) mejora la calidad de las probabilidades predichas
     """)
 
 
 # Footer
 st.markdown(
     f'<div class="footer-text">'
-    f'Hecho con datos de API-Football y clubelo.com · Modelo v3 actualizado al {last_date}'
+    f'Hecho con datos de API-Football y clubelo.com · Modelo final actualizado al {last_date}'
     f'</div>',
     unsafe_allow_html=True,
 )
