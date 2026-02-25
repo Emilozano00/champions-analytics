@@ -1,0 +1,90 @@
+{
+  "model": "Random Forest",
+  "variant": "C",
+  "n_features": 47,
+  "accuracy": 0.5369,
+  "log_loss": 0.9665,
+  "f1_macro": 0.4499,
+  "delta_accuracy_vs_v1": 0.0215,
+  "delta_log_loss_vs_v1": -0.048,
+  "training_accuracy": 0.8914,
+  "feature_importance_top15": [
+    {
+      "feature": "elo_diff",
+      "importance": 0.026798
+    },
+    {
+      "feature": "elo_expected_home",
+      "importance": 0.026234
+    },
+    {
+      "feature": "elo_home",
+      "importance": 0.022849
+    },
+    {
+      "feature": "home_domestic_home_goals_avg",
+      "importance": 0.018336
+    },
+    {
+      "feature": "away_domestic_xg_against_last5",
+      "importance": 0.015938
+    },
+    {
+      "feature": "home_rolling_points",
+      "importance": 0.015656
+    },
+    {
+      "feature": "elo_away",
+      "importance": 0.015374
+    },
+    {
+      "feature": "away_rolling_goals_for",
+      "importance": 0.015233
+    },
+    {
+      "feature": "away_domestic_away_goals_avg",
+      "importance": 0.015092
+    },
+    {
+      "feature": "home_rolling_pass_accuracy",
+      "importance": 0.014386
+    },
+    {
+      "feature": "away_rolling_possession",
+      "importance": 0.013399
+    },
+    {
+      "feature": "away_rolling_corners",
+      "importance": 0.012694
+    },
+    {
+      "feature": "home_rolling_possession",
+      "importance": 0.012412
+    },
+    {
+      "feature": "away_rolling_avg_rating",
+      "importance": 0.012412
+    },
+    {
+      "feature": "home_rolling_avg_rating",
+      "importance": 0.011989
+    }
+  ],
+  "per_variant": {
+    "A": {
+      "model": "Random Forest",
+      "accuracy": 0.5154,
+      "log_loss": 1.0145
+    },
+    "B": {
+      "model": "HistGradientBoosting",
+      "accuracy": 0.5352,
+      "log_loss": 2.0019
+    },
+    "C": {
+      "model": "Random Forest",
+      "accuracy": 0.5369,
+      "log_loss": 0.9665
+    }
+  }
+}

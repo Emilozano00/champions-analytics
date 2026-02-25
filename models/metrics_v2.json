@@ -1,0 +1,41 @@
+{
+  "improved": false,
+  "per_model_comparison": {
+    "Random Forest": {
+      "original": {
+        "accuracy": 0.5154,
+        "log_loss": 1.0145,
+        "f1_macro": 0.4025
+      },
+      "with_domestic": {
+        "accuracy": 0.499,
+        "log_loss": 1.0128,
+        "f1_macro": 0.3919
+      }
+    },
+    "HistGradientBoosting": {
+      "original": {
+        "accuracy": 0.4941,
+        "log_loss": 2.1933,
+        "f1_macro": 0.3846
+      },
+      "with_domestic": {
+        "accuracy": 0.4722,
+        "log_loss": 2.2586,
+        "f1_macro": 0.3725
+      }
+    },
+    "Logistic Regression": {
+      "original": {
+        "accuracy": 0.4091,
+        "log_loss": 1.5107,
+        "f1_macro": 0.3875
+      },
+      "with_domestic": {
+        "accuracy": 0.4228,
+        "log_loss": 1.6291,
+        "f1_macro": 0.4024
+      }
+    }
+  }
+}

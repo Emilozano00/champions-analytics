@@ -1,0 +1,2089 @@
+{
+  "33": {
+    "name": "Manchester United",
+    "country": "England",
+    "seasons": {
+      "2023": {
+        "league_id": 39,
+        "league_name": "Premier League",
+        "country": "England"
+      }
+    }
+  },
+  "34": {
+    "name": "Newcastle",
+    "country": "England",
+    "seasons": {
+      "2023": {
+        "league_id": 39,
+        "league_name": "Premier League",
+        "country": "England"
+      },
+      "2025": {
+        "league_id": 39,
+        "league_name": "Premier League",
+        "country": "England"
+      }
+    }
+  },
+  "42": {
+    "name": "Arsenal",
+    "country": "England",
+    "seasons": {
+      "2023": {
+        "league_id": 39,
+        "league_name": "Premier League",
+        "country": "England"
+      },
+      "2024": {
+        "league_id": 39,
+        "league_name": "Premier League",
+        "country": "England"
+      },
+      "2025": {
+        "league_id": 39,
+        "league_name": "Premier League",
+        "country": "England"
+      }
+    }
+  },
+  "50": {
+    "name": "Manchester City",
+    "country": "England",
+    "seasons": {
+      "2023": {
+        "league_id": 39,
+        "league_name": "Premier League",
+        "country": "England"
+      },
+      "2024": {
+        "league_id": 39,
+        "league_name": "Premier League",
+        "country": "England"
+      },
+      "2025": {
+        "league_id": 39,
+        "league_name": "Premier League",
+        "country": "England"
+      }
+    }
+  },
+  "81": {
+    "name": "Marseille",
+    "country": "France",
+    "seasons": {
+      "2023": {
+        "league_id": 61,
+        "league_name": "Ligue 1",
+        "country": "France"
+      },
+      "2025": {
+        "league_id": 61,
+        "league_name": "Ligue 1",
+        "country": "France"
+      }
+    }
+  },
+  "85": {
+    "name": "Paris Saint Germain",
+    "country": "France",
+    "seasons": {
+      "2023": {
+        "league_id": 61,
+        "league_name": "Ligue 1",
+        "country": "France"
+      },
+      "2024": {
+        "league_id": 61,
+        "league_name": "Ligue 1",
+        "country": "France"
+      },
+      "2025": {
+        "league_id": 61,
+        "league_name": "Ligue 1",
+        "country": "France"
+      }
+    }
+  },
+  "116": {
+    "name": "Lens",
+    "country": "France",
+    "seasons": {
+      "2023": {
+        "league_id": 61,
+        "league_name": "Ligue 1",
+        "country": "France"
+      }
+    }
+  },
+  "157": {
+    "name": "Bayern München",
+    "country": "Germany",
+    "seasons": {
+      "2023": {
+        "league_id": 78,
+        "league_name": "Bundesliga",
+        "country": "Germany"
+      },
+      "2024": {
+        "league_id": 78,
+        "league_name": "Bundesliga",
+        "country": "Germany"
+      },
+      "2025": {
+        "league_id": 78,
+        "league_name": "Bundesliga",
+        "country": "Germany"
+      }
+    }
+  },
+  "165": {
+    "name": "Borussia Dortmund",
+    "country": "Germany",
+    "seasons": {
+      "2023": {
+        "league_id": 78,
+        "league_name": "Bundesliga",
+        "country": "Germany"
+      },
+      "2024": {
+        "league_id": 78,
+        "league_name": "Bundesliga",
+        "country": "Germany"
+      },
+      "2025": {
+        "league_id": 78,
+        "league_name": "Bundesliga",
+        "country": "Germany"
+      }
+    }
+  },
+  "173": {
+    "name": "RB Leipzig",
+    "country": "Germany",
+    "seasons": {
+      "2023": {
+        "league_id": 78,
+        "league_name": "Bundesliga",
+        "country": "Germany"
+      },
+      "2024": {
+        "league_id": 78,
+        "league_name": "Bundesliga",
+        "country": "Germany"
+      }
+    }
+  },
+  "182": {
+    "name": "Union Berlin",
+    "country": "Germany",
+    "seasons": {
+      "2023": {
+        "league_id": 78,
+        "league_name": "Bundesliga",
+        "country": "Germany"
+      }
+    }
+  },
+  "197": {
+    "name": "PSV Eindhoven",
+    "country": "Netherlands",
+    "seasons": {
+      "2023": {
+        "league_id": 88,
+        "league_name": "Eredivisie",
+        "country": "Netherlands"
+      },
+      "2024": {
+        "league_id": 88,
+        "league_name": "Eredivisie",
+        "country": "Netherlands"
+      },
+      "2025": {
+        "league_id": 88,
+        "league_name": "Eredivisie",
+        "country": "Netherlands"
+      }
+    }
+  },
+  "209": {
+    "name": "Feyenoord",
+    "country": "Netherlands",
+    "seasons": {
+      "2023": {
+        "league_id": 88,
+        "league_name": "Eredivisie",
+        "country": "Netherlands"
+      },
+      "2024": {
+        "league_id": 88,
+        "league_name": "Eredivisie",
+        "country": "Netherlands"
+      },
+      "2025": {
+        "league_id": 88,
+        "league_name": "Eredivisie",
+        "country": "Netherlands"
+      }
+    }
+  },
+  "211": {
+    "name": "Benfica",
+    "country": "Portugal",
+    "seasons": {
+      "2023": {
+        "league_id": 94,
+        "league_name": "Primeira Liga",
+        "country": "Portugal"
+      },
+      "2024": {
+        "league_id": 94,
+        "league_name": "Primeira Liga",
+        "country": "Portugal"
+      },
+      "2025": {
+        "league_id": 94,
+        "league_name": "Primeira Liga",
+        "country": "Portugal"
+      }
+    }
+  },
+  "212": {
+    "name": "FC Porto",
+    "country": "Portugal",
+    "seasons": {
+      "2023": {
+        "league_id": 94,
+        "league_name": "Primeira Liga",
+        "country": "Portugal"
+      }
+    }
+  },
+  "217": {
+    "name": "SC Braga",
+    "country": "Portugal",
+    "seasons": {
+      "2023": {
+        "league_id": 94,
+        "league_name": "Primeira Liga",
+        "country": "Portugal"
+      }
+    }
+  },
+  "247": {
+    "name": "Celtic",
+    "country": "Scotland",
+    "seasons": {
+      "2023": {
+        "league_id": 179,
+        "league_name": "Premiership",
+        "country": "Scotland"
+      },
+      "2024": {
+        "league_id": 179,
+        "league_name": "Premiership",
+        "country": "Scotland"
+      },
+      "2025": {
+        "league_id": 179,
+        "league_name": "Premiership",
+        "country": "Scotland"
+      }
+    }
+  },
+  "257": {
+    "name": "Rangers",
+    "country": "Scotland",
+    "seasons": {
+      "2023": {
+        "league_id": 179,
+        "league_name": "Premiership",
+        "country": "Scotland"
+      },
+      "2024": {
+        "league_id": 179,
+        "league_name": "Premiership",
+        "country": "Scotland"
+      },
+      "2025": {
+        "league_id": 179,
+        "league_name": "Premiership",
+        "country": "Scotland"
+      }
+    }
+  },
+  "276": {
+    "name": "Breidablik",
+    "country": "Iceland",
+    "seasons": {
+      "2023": {
+        "league_id": 164,
+        "league_name": "Úrvalsdeild",
+        "country": "Iceland"
+      },
+      "2025": {
+        "league_id": 164,
+        "league_name": "Úrvalsdeild",
+        "country": "Iceland"
+      }
+    }
+  },
+  "329": {
+    "name": "Molde",
+    "country": "Norway",
+    "seasons": {
+      "2023": {
+        "league_id": 103,
+        "league_name": "Eliteserien",
+        "country": "Norway"
+      }
+    }
+  },
+  "354": {
+    "name": "The New Saints",
+    "country": "Wales",
+    "seasons": {
+      "2023": {
+        "league_id": 110,
+        "league_name": "Premier League",
+        "country": "Wales"
+      },
+      "2024": {
+        "league_id": 110,
+        "league_name": "Premier League",
+        "country": "Wales"
+      },
+      "2025": {
+        "league_id": 110,
+        "league_name": "Premier League",
+        "country": "Wales"
+      }
+    }
+  },
+  "367": {
+    "name": "BK Hacken",
+    "country": "Sweden",
+    "seasons": {
+      "2023": {
+        "league_id": 113,
+        "league_name": "Allsvenskan",
+        "country": "Sweden"
+      }
+    }
+  },
+  "388": {
+    "name": "Bate Borisov",
+    "country": "Belarus",
+    "seasons": {
+      "2023": {
+        "league_id": 116,
+        "league_name": "Premier League",
+        "country": "Belarus"
+      }
+    }
+  },
+  "400": {
+    "name": "FC Copenhagen",
+    "country": "Denmark",
+    "seasons": {
+      "2023": {
+        "league_id": 119,
+        "league_name": "Superliga",
+        "country": "Denmark"
+      },
+      "2025": {
+        "league_id": 119,
+        "league_name": "Superliga",
+        "country": "Denmark"
+      }
+    }
+  },
+  "487": {
+    "name": "Lazio",
+    "country": "Italy",
+    "seasons": {
+      "2023": {
+        "league_id": 135,
+        "league_name": "Serie A",
+        "country": "Italy"
+      }
+    }
+  },
+  "489": {
+    "name": "AC Milan",
+    "country": "Italy",
+    "seasons": {
+      "2023": {
+        "league_id": 135,
+        "league_name": "Serie A",
+        "country": "Italy"
+      },
+      "2024": {
+        "league_id": 135,
+        "league_name": "Serie A",
+        "country": "Italy"
+      }
+    }
+  },
+  "492": {
+    "name": "Napoli",
+    "country": "Italy",
+    "seasons": {
+      "2023": {
+        "league_id": 135,
+        "league_name": "Serie A",
+        "country": "Italy"
+      },
+      "2025": {
+        "league_id": 135,
+        "league_name": "Serie A",
+        "country": "Italy"
+      }
+    }
+  },
+  "505": {
+    "name": "Inter",
+    "country": "Italy",
+    "seasons": {
+      "2023": {
+        "league_id": 135,
+        "league_name": "Serie A",
+        "country": "Italy"
+      },
+      "2024": {
+        "league_id": 135,
+        "league_name": "Serie A",
+        "country": "Italy"
+      },
+      "2025": {
+        "league_id": 135,
+        "league_name": "Serie A",
+        "country": "Italy"
+      }
+    }
+  },
+  "529": {
+    "name": "Barcelona",
+    "country": "Spain",
+    "seasons": {
+      "2023": {
+        "league_id": 140,
+        "league_name": "La Liga",
+        "country": "Spain"
+      },
+      "2024": {
+        "league_id": 140,
+        "league_name": "La Liga",
+        "country": "Spain"
+      },
+      "2025": {
+        "league_id": 140,
+        "league_name": "La Liga",
+        "country": "Spain"
+      }
+    }
+  },
+  "530": {
+    "name": "Atletico Madrid",
+    "country": "Spain",
+    "seasons": {
+      "2023": {
+        "league_id": 140,
+        "league_name": "La Liga",
+        "country": "Spain"
+      },
+      "2024": {
+        "league_id": 140,
+        "league_name": "La Liga",
+        "country": "Spain"
+      },
+      "2025": {
+        "league_id": 140,
+        "league_name": "La Liga",
+        "country": "Spain"
+      }
+    }
+  },
+  "536": {
+    "name": "Sevilla",
+    "country": "Spain",
+    "seasons": {
+      "2023": {
+        "league_id": 140,
+        "league_name": "La Liga",
+        "country": "Spain"
+      }
+    }
+  },
+  "541": {
+    "name": "Real Madrid",
+    "country": "Spain",
+    "seasons": {
+      "2023": {
+        "league_id": 140,
+        "league_name": "La Liga",
+        "country": "Spain"
+      },
+      "2024": {
+        "league_id": 140,
+        "league_name": "La Liga",
+        "country": "Spain"
+      },
+      "2025": {
+        "league_id": 140,
+        "league_name": "La Liga",
+        "country": "Spain"
+      }
+    }
+  },
+  "548": {
+    "name": "Real Sociedad",
+    "country": "Spain",
+    "seasons": {
+      "2023": {
+        "league_id": 140,
+        "league_name": "La Liga",
+        "country": "Spain"
+      }
+    }
+  },
+  "550": {
+    "name": "Shakhtar Donetsk",
+    "country": "Ukraine",
+    "seasons": {
+      "2023": {
+        "league_id": 333,
+        "league_name": "Premier League",
+        "country": "Ukraine"
+      },
+      "2024": {
+        "league_id": 333,
+        "league_name": "Premier League",
+        "country": "Ukraine"
+      }
+    }
+  },
+  "556": {
+    "name": "Qarabag",
+    "country": "Azerbaijan",
+    "seasons": {
+      "2023": {
+        "league_id": 419,
+        "league_name": "Premyer Liqa",
+        "country": "Azerbaijan"
+      },
+      "2024": {
+        "league_id": 419,
+        "league_name": "Premyer Liqa",
+        "country": "Azerbaijan"
+      },
+      "2025": {
+        "league_id": 419,
+        "league_name": "Premyer Liqa",
+        "country": "Azerbaijan"
+      }
+    }
+  },
+  "562": {
+    "name": "FC Astana",
+    "country": "Kazakhstan",
+    "seasons": {
+      "2023": {
+        "league_id": 389,
+        "league_name": "Premier League",
+        "country": "Kazakhstan"
+      }
+    }
+  },
+  "565": {
+    "name": "BSC Young Boys",
+    "country": "Switzerland",
+    "seasons": {
+      "2023": {
+        "league_id": 207,
+        "league_name": "Super League",
+        "country": "Switzerland"
+      },
+      "2024": {
+        "league_id": 207,
+        "league_name": "Super League",
+        "country": "Switzerland"
+      }
+    }
+  },
+  "566": {
+    "name": "Ludogorets",
+    "country": "Bulgaria",
+    "seasons": {
+      "2023": {
+        "league_id": 172,
+        "league_name": "First League",
+        "country": "Bulgaria"
+      },
+      "2024": {
+        "league_id": 172,
+        "league_name": "First League",
+        "country": "Bulgaria"
+      },
+      "2025": {
+        "league_id": 172,
+        "league_name": "First League",
+        "country": "Bulgaria"
+      }
+    }
+  },
+  "568": {
+    "name": "Sheriff Tiraspol",
+    "country": "Moldova",
+    "seasons": {
+      "2023": {
+        "league_id": 394,
+        "league_name": "Super Liga",
+        "country": "Moldova"
+      }
+    }
+  },
+  "571": {
+    "name": "Red Bull Salzburg",
+    "country": "Austria",
+    "seasons": {
+      "2023": {
+        "league_id": 218,
+        "league_name": "Bundesliga",
+        "country": "Austria"
+      },
+      "2024": {
+        "league_id": 218,
+        "league_name": "Bundesliga",
+        "country": "Austria"
+      },
+      "2025": {
+        "league_id": 218,
+        "league_name": "Bundesliga",
+        "country": "Austria"
+      }
+    }
+  },
+  "575": {
+    "name": "AEK Athens FC",
+    "country": "Greece",
+    "seasons": {
+      "2023": {
+        "league_id": 197,
+        "league_name": "Super League 1",
+        "country": "Greece"
+      }
+    }
+  },
+  "579": {
+    "name": "Buducnost Podgorica",
+    "country": "Montenegro",
+    "seasons": {
+      "2023": {
+        "league_id": 355,
+        "league_name": "First League",
+        "country": "Montenegro"
+      },
+      "2025": {
+        "league_id": 355,
+        "league_name": "First League",
+        "country": "Montenegro"
+      }
+    }
+  },
+  "586": {
+    "name": "FK Zalgiris Vilnius",
+    "country": "Lithuania",
+    "seasons": {
+      "2023": {
+        "league_id": 362,
+        "league_name": "A Lyga",
+        "country": "Lithuania"
+      },
+      "2025": {
+        "league_id": 362,
+        "league_name": "A Lyga",
+        "country": "Lithuania"
+      }
+    }
+  },
+  "588": {
+    "name": "Zrinjski",
+    "country": "Bosnia",
+    "seasons": {
+      "2023": {
+        "league_id": 315,
+        "league_name": "Premijer Liga",
+        "country": "Bosnia"
+      },
+      "2025": {
+        "league_id": 315,
+        "league_name": "Premijer Liga",
+        "country": "Bosnia"
+      }
+    }
+  },
+  "598": {
+    "name": "FK Crvena Zvezda",
+    "country": "Serbia",
+    "seasons": {
+      "2023": {
+        "league_id": 286,
+        "league_name": "Super Liga",
+        "country": "Serbia"
+      },
+      "2024": {
+        "league_id": 286,
+        "league_name": "Super Liga",
+        "country": "Serbia"
+      },
+      "2025": {
+        "league_id": 286,
+        "league_name": "Super Liga",
+        "country": "Serbia"
+      }
+    }
+  },
+  "617": {
+    "name": "Panathinaikos",
+    "country": "Greece",
+    "seasons": {
+      "2023": {
+        "league_id": 197,
+        "league_name": "Super League 1",
+        "country": "Greece"
+      },
+      "2025": {
+        "league_id": 197,
+        "league_name": "Super League 1",
+        "country": "Greece"
+      }
+    }
+  },
+  "620": {
+    "name": "Dinamo Zagreb",
+    "country": "Croatia",
+    "seasons": {
+      "2023": {
+        "league_id": 210,
+        "league_name": "HNL",
+        "country": "Croatia"
+      },
+      "2024": {
+        "league_id": 210,
+        "league_name": "HNL",
+        "country": "Croatia"
+      }
+    }
+  },
+  "628": {
+    "name": "Sparta Praha",
+    "country": "Czech-Republic",
+    "seasons": {
+      "2023": {
+        "league_id": 345,
+        "league_name": "Czech Liga",
+        "country": "Czech-Republic"
+      },
+      "2024": {
+        "league_id": 345,
+        "league_name": "Czech Liga",
+        "country": "Czech-Republic"
+      }
+    }
+  },
+  "637": {
+    "name": "Sturm Graz",
+    "country": "Austria",
+    "seasons": {
+      "2023": {
+        "league_id": 218,
+        "league_name": "Bundesliga",
+        "country": "Austria"
+      },
+      "2024": {
+        "league_id": 218,
+        "league_name": "Bundesliga",
+        "country": "Austria"
+      },
+      "2025": {
+        "league_id": 218,
+        "league_name": "Bundesliga",
+        "country": "Austria"
+      }
+    }
+  },
+  "645": {
+    "name": "Galatasaray",
+    "country": "Turkey",
+    "seasons": {
+      "2023": {
+        "league_id": 203,
+        "league_name": "Süper Lig",
+        "country": "Turkey"
+      },
+      "2024": {
+        "league_id": 203,
+        "league_name": "Süper Lig",
+        "country": "Turkey"
+      },
+      "2025": {
+        "league_id": 203,
+        "league_name": "Süper Lig",
+        "country": "Turkey"
+      }
+    }
+  },
+  "649": {
+    "name": "HJK helsinki",
+    "country": "Finland",
+    "seasons": {
+      "2023": {
+        "league_id": 244,
+        "league_name": "Veikkausliiga",
+        "country": "Finland"
+      },
+      "2024": {
+        "league_id": 244,
+        "league_name": "Veikkausliiga",
+        "country": "Finland"
+      }
+    }
+  },
+  "651": {
+    "name": "Ferencvarosi TC",
+    "country": "Hungary",
+    "seasons": {
+      "2023": {
+        "league_id": 271,
+        "league_name": "NB I",
+        "country": "Hungary"
+      },
+      "2024": {
+        "league_id": 271,
+        "league_name": "NB I",
+        "country": "Hungary"
+      },
+      "2025": {
+        "league_id": 271,
+        "league_name": "NB I",
+        "country": "Hungary"
+      }
+    }
+  },
+  "652": {
+    "name": "Shamrock Rovers",
+    "country": "Ireland",
+    "seasons": {
+      "2023": {
+        "league_id": 357,
+        "league_name": "Premier Division",
+        "country": "Ireland"
+      },
+      "2024": {
+        "league_id": 357,
+        "league_name": "Premier Division",
+        "country": "Ireland"
+      }
+    }
+  },
+  "656": {
+    "name": "Slovan Bratislava",
+    "country": "Slovakia",
+    "seasons": {
+      "2023": {
+        "league_id": 332,
+        "league_name": "Super Liga",
+        "country": "Slovakia"
+      },
+      "2024": {
+        "league_id": 332,
+        "league_name": "Super Liga",
+        "country": "Slovakia"
+      },
+      "2025": {
+        "league_id": 332,
+        "league_name": "Super Liga",
+        "country": "Slovakia"
+      }
+    }
+  },
+  "667": {
+    "name": "Lincoln Red Imps FC",
+    "country": "Gibraltar",
+    "seasons": {
+      "2023": {
+        "league_id": 758,
+        "league_name": "Premier Division",
+        "country": "Gibraltar"
+      },
+      "2024": {
+        "league_id": 758,
+        "league_name": "Premier Division",
+        "country": "Gibraltar"
+      },
+      "2025": {
+        "league_id": 758,
+        "league_name": "Premier Division",
+        "country": "Gibraltar"
+      }
+    }
+  },
+  "677": {
+    "name": "Olimpija Ljubljana",
+    "country": "Slovenia",
+    "seasons": {
+      "2023": {
+        "league_id": 373,
+        "league_name": "1. SNL",
+        "country": "Slovenia"
+      },
+      "2025": {
+        "league_id": 373,
+        "league_name": "1. SNL",
+        "country": "Slovenia"
+      }
+    }
+  },
+  "687": {
+    "name": "Flora Tallinn",
+    "country": "Estonia",
+    "seasons": {
+      "2023": {
+        "league_id": 329,
+        "league_name": "Meistriliiga",
+        "country": "Estonia"
+      },
+      "2024": {
+        "league_id": 329,
+        "league_name": "Meistriliiga",
+        "country": "Estonia"
+      }
+    }
+  },
+  "700": {
+    "name": "Tre Penne",
+    "country": "San-Marino",
+    "seasons": {
+      "2023": {
+        "league_id": 404,
+        "league_name": "Campionato",
+        "country": "San-Marino"
+      }
+    }
+  },
+  "701": {
+    "name": "KI Klaksvik",
+    "country": "Faroe-Islands",
+    "seasons": {
+      "2023": {
+        "league_id": 367,
+        "league_name": "Meistaradeildin",
+        "country": "Faroe-Islands"
+      },
+      "2024": {
+        "league_id": 367,
+        "league_name": "Meistaradeildin",
+        "country": "Faroe-Islands"
+      }
+    }
+  },
+  "708": {
+    "name": "Partizani",
+    "country": "Albania",
+    "seasons": {
+      "2023": {
+        "league_id": 310,
+        "league_name": "Superliga",
+        "country": "Albania"
+      }
+    }
+  },
+  "740": {
+    "name": "Antwerp",
+    "country": "Belgium",
+    "seasons": {
+      "2023": {
+        "league_id": 144,
+        "league_name": "Jupiler Pro League",
+        "country": "Belgium"
+      }
+    }
+  },
+  "742": {
+    "name": "Genk",
+    "country": "Belgium",
+    "seasons": {
+      "2023": {
+        "league_id": 144,
+        "league_name": "Jupiler Pro League",
+        "country": "Belgium"
+      }
+    }
+  },
+  "2184": {
+    "name": "Servette FC",
+    "country": "Switzerland",
+    "seasons": {
+      "2023": {
+        "league_id": 207,
+        "league_name": "Super League",
+        "country": "Switzerland"
+      },
+      "2025": {
+        "league_id": 207,
+        "league_name": "Super League",
+        "country": "Switzerland"
+      }
+    }
+  },
+  "2262": {
+    "name": "Dinamo Tbilisi",
+    "country": "Georgia",
+    "seasons": {
+      "2023": {
+        "league_id": 327,
+        "league_name": "Erovnuli Liga",
+        "country": "Georgia"
+      }
+    }
+  },
+  "2276": {
+    "name": "FC Urartu",
+    "country": "Armenia",
+    "seasons": {
+      "2023": {
+        "league_id": 342,
+        "league_name": "Premier League",
+        "country": "Armenia"
+      }
+    }
+  },
+  "2596": {
+    "name": "Farul Constanta",
+    "country": "Romania",
+    "seasons": {
+      "2023": {
+        "league_id": 283,
+        "league_name": "Liga I",
+        "country": "Romania"
+      }
+    }
+  },
+  "2646": {
+    "name": "TSC Backa Topola",
+    "country": "Serbia",
+    "seasons": {
+      "2023": {
+        "league_id": 286,
+        "league_name": "Super Liga",
+        "country": "Serbia"
+      }
+    }
+  },
+  "3345": {
+    "name": "Atlètic Club d'Escaldes",
+    "country": "Andorra",
+    "seasons": {
+      "2023": {
+        "league_id": 312,
+        "league_name": "1a Divisió",
+        "country": "Andorra"
+      }
+    }
+  },
+  "3408": {
+    "name": "Aris",
+    "country": "Cyprus",
+    "seasons": {
+      "2023": {
+        "league_id": 318,
+        "league_name": "1. Division",
+        "country": "Cyprus"
+      }
+    }
+  },
+  "3491": {
+    "name": "Raków Częstochowa",
+    "country": "Poland",
+    "seasons": {
+      "2023": {
+        "league_id": 106,
+        "league_name": "Ekstraklasa",
+        "country": "Poland"
+      }
+    }
+  },
+  "3623": {
+    "name": "Dnipro-1",
+    "country": "Ukraine",
+    "seasons": {
+      "2023": {
+        "league_id": 333,
+        "league_name": "Premier League",
+        "country": "Ukraine"
+      }
+    }
+  },
+  "4153": {
+    "name": "Valmiera / BSS",
+    "country": "Latvia",
+    "seasons": {
+      "2023": {
+        "league_id": 365,
+        "league_name": "Virsliga",
+        "country": "Latvia"
+      }
+    }
+  },
+  "4195": {
+    "name": "Maccabi Haifa",
+    "country": "Israel",
+    "seasons": {
+      "2023": {
+        "league_id": 383,
+        "league_name": "Ligat Ha'al",
+        "country": "Israel"
+      }
+    }
+  },
+  "4346": {
+    "name": "Struga",
+    "country": "Macedonia",
+    "seasons": {
+      "2023": {
+        "league_id": 371,
+        "league_name": "First League",
+        "country": "Macedonia"
+      },
+      "2024": {
+        "league_id": 371,
+        "league_name": "First League",
+        "country": "Macedonia"
+      }
+    }
+  },
+  "4626": {
+    "name": "Hamrun Spartans",
+    "country": "Malta",
+    "seasons": {
+      "2023": {
+        "league_id": 393,
+        "league_name": "Premier League",
+        "country": "Malta"
+      },
+      "2024": {
+        "league_id": 393,
+        "league_name": "Premier League",
+        "country": "Malta"
+      },
+      "2025": {
+        "league_id": 393,
+        "league_name": "Premier League",
+        "country": "Malta"
+      }
+    }
+  },
+  "5354": {
+    "name": "Larne",
+    "country": "Northern-Ireland",
+    "seasons": {
+      "2023": {
+        "league_id": 408,
+        "league_name": "Premiership",
+        "country": "Northern-Ireland"
+      },
+      "2024": {
+        "league_id": 408,
+        "league_name": "Premiership",
+        "country": "Northern-Ireland"
+      }
+    }
+  },
+  "11907": {
+    "name": "Swift Hesperange",
+    "country": "Luxembourg",
+    "seasons": {
+      "2023": {
+        "league_id": 261,
+        "league_name": "National Division",
+        "country": "Luxembourg"
+      }
+    }
+  },
+  "12733": {
+    "name": "Ballkani",
+    "country": "Kosovo",
+    "seasons": {
+      "2023": {
+        "league_id": 664,
+        "league_name": "Superliga",
+        "country": "Kosovo"
+      },
+      "2024": {
+        "league_id": 664,
+        "league_name": "Superliga",
+        "country": "Kosovo"
+      }
+    }
+  },
+  "40": {
+    "name": "Liverpool",
+    "country": "England",
+    "seasons": {
+      "2024": {
+        "league_id": 39,
+        "league_name": "Premier League",
+        "country": "England"
+      },
+      "2025": {
+        "league_id": 39,
+        "league_name": "Premier League",
+        "country": "England"
+      }
+    }
+  },
+  "66": {
+    "name": "Aston Villa",
+    "country": "England",
+    "seasons": {
+      "2024": {
+        "league_id": 39,
+        "league_name": "Premier League",
+        "country": "England"
+      }
+    }
+  },
+  "79": {
+    "name": "Lille",
+    "country": "France",
+    "seasons": {
+      "2024": {
+        "league_id": 61,
+        "league_name": "Ligue 1",
+        "country": "France"
+      }
+    }
+  },
+  "91": {
+    "name": "Monaco",
+    "country": "France",
+    "seasons": {
+      "2024": {
+        "league_id": 61,
+        "league_name": "Ligue 1",
+        "country": "France"
+      },
+      "2025": {
+        "league_id": 61,
+        "league_name": "Ligue 1",
+        "country": "France"
+      }
+    }
+  },
+  "106": {
+    "name": "Stade Brestois 29",
+    "country": "France",
+    "seasons": {
+      "2024": {
+        "league_id": 61,
+        "league_name": "Ligue 1",
+        "country": "France"
+      }
+    }
+  },
+  "168": {
+    "name": "Bayer Leverkusen",
+    "country": "Germany",
+    "seasons": {
+      "2024": {
+        "league_id": 78,
+        "league_name": "Bundesliga",
+        "country": "Germany"
+      },
+      "2025": {
+        "league_id": 78,
+        "league_name": "Bundesliga",
+        "country": "Germany"
+      }
+    }
+  },
+  "172": {
+    "name": "VfB Stuttgart",
+    "country": "Germany",
+    "seasons": {
+      "2024": {
+        "league_id": 78,
+        "league_name": "Bundesliga",
+        "country": "Germany"
+      }
+    }
+  },
+  "228": {
+    "name": "Sporting CP",
+    "country": "Portugal",
+    "seasons": {
+      "2024": {
+        "league_id": 94,
+        "league_name": "Primeira Liga",
+        "country": "Portugal"
+      },
+      "2025": {
+        "league_id": 94,
+        "league_name": "Primeira Liga",
+        "country": "Portugal"
+      }
+    }
+  },
+  "278": {
+    "name": "Vikingur Reykjavik",
+    "country": "Iceland",
+    "seasons": {
+      "2024": {
+        "league_id": 164,
+        "league_name": "Úrvalsdeild",
+        "country": "Iceland"
+      }
+    }
+  },
+  "327": {
+    "name": "Bodo/Glimt",
+    "country": "Norway",
+    "seasons": {
+      "2024": {
+        "league_id": 103,
+        "league_name": "Eliteserien",
+        "country": "Norway"
+      },
+      "2025": {
+        "league_id": 103,
+        "league_name": "Eliteserien",
+        "country": "Norway"
+      }
+    }
+  },
+  "336": {
+    "name": "Jagiellonia",
+    "country": "Poland",
+    "seasons": {
+      "2024": {
+        "league_id": 106,
+        "league_name": "Ekstraklasa",
+        "country": "Poland"
+      }
+    }
+  },
+  "375": {
+    "name": "Malmo FF",
+    "country": "Sweden",
+    "seasons": {
+      "2024": {
+        "league_id": 113,
+        "league_name": "Allsvenskan",
+        "country": "Sweden"
+      },
+      "2025": {
+        "league_id": 113,
+        "league_name": "Allsvenskan",
+        "country": "Sweden"
+      }
+    }
+  },
+  "394": {
+    "name": "Dinamo Minsk",
+    "country": "Belarus",
+    "seasons": {
+      "2024": {
+        "league_id": 116,
+        "league_name": "Premier League",
+        "country": "Belarus"
+      },
+      "2025": {
+        "league_id": 116,
+        "league_name": "Premier League",
+        "country": "Belarus"
+      }
+    }
+  },
+  "397": {
+    "name": "FC Midtjylland",
+    "country": "Denmark",
+    "seasons": {
+      "2024": {
+        "league_id": 119,
+        "league_name": "Superliga",
+        "country": "Denmark"
+      }
+    }
+  },
+  "415": {
+    "name": "Twente",
+    "country": "Netherlands",
+    "seasons": {
+      "2024": {
+        "league_id": 88,
+        "league_name": "Eredivisie",
+        "country": "Netherlands"
+      }
+    }
+  },
+  "496": {
+    "name": "Juventus",
+    "country": "Italy",
+    "seasons": {
+      "2024": {
+        "league_id": 135,
+        "league_name": "Serie A",
+        "country": "Italy"
+      },
+      "2025": {
+        "league_id": 135,
+        "league_name": "Serie A",
+        "country": "Italy"
+      }
+    }
+  },
+  "499": {
+    "name": "Atalanta",
+    "country": "Italy",
+    "seasons": {
+      "2024": {
+        "league_id": 135,
+        "league_name": "Serie A",
+        "country": "Italy"
+      },
+      "2025": {
+        "league_id": 135,
+        "league_name": "Serie A",
+        "country": "Italy"
+      }
+    }
+  },
+  "500": {
+    "name": "Bologna",
+    "country": "Italy",
+    "seasons": {
+      "2024": {
+        "league_id": 135,
+        "league_name": "Serie A",
+        "country": "Italy"
+      }
+    }
+  },
+  "547": {
+    "name": "Girona",
+    "country": "Spain",
+    "seasons": {
+      "2024": {
+        "league_id": 140,
+        "league_name": "La Liga",
+        "country": "Spain"
+      }
+    }
+  },
+  "559": {
+    "name": "FCSB",
+    "country": "Romania",
+    "seasons": {
+      "2024": {
+        "league_id": 283,
+        "league_name": "Liga I",
+        "country": "Romania"
+      },
+      "2025": {
+        "league_id": 283,
+        "league_name": "Liga I",
+        "country": "Romania"
+      }
+    }
+  },
+  "560": {
+    "name": "Slavia Praha",
+    "country": "Czech-Republic",
+    "seasons": {
+      "2024": {
+        "league_id": 345,
+        "league_name": "Czech Liga",
+        "country": "Czech-Republic"
+      },
+      "2025": {
+        "league_id": 345,
+        "league_name": "Czech Liga",
+        "country": "Czech-Republic"
+      }
+    }
+  },
+  "569": {
+    "name": "Club Brugge KV",
+    "country": "Belgium",
+    "seasons": {
+      "2024": {
+        "league_id": 144,
+        "league_name": "Jupiler Pro League",
+        "country": "Belgium"
+      },
+      "2025": {
+        "league_id": 144,
+        "league_name": "Jupiler Pro League",
+        "country": "Belgium"
+      }
+    }
+  },
+  "572": {
+    "name": "Dynamo Kyiv",
+    "country": "Ukraine",
+    "seasons": {
+      "2024": {
+        "league_id": 333,
+        "league_name": "Premier League",
+        "country": "Ukraine"
+      },
+      "2025": {
+        "league_id": 333,
+        "league_name": "Premier League",
+        "country": "Ukraine"
+      }
+    }
+  },
+  "573": {
+    "name": "FK Partizan",
+    "country": "Serbia",
+    "seasons": {
+      "2024": {
+        "league_id": 286,
+        "league_name": "Super Liga",
+        "country": "Serbia"
+      }
+    }
+  },
+  "604": {
+    "name": "Maccabi Tel Aviv",
+    "country": "Israel",
+    "seasons": {
+      "2024": {
+        "league_id": 383,
+        "league_name": "Ligat Ha'al",
+        "country": "Israel"
+      },
+      "2025": {
+        "league_id": 383,
+        "league_name": "Ligat Ha'al",
+        "country": "Israel"
+      }
+    }
+  },
+  "606": {
+    "name": "FC Lugano",
+    "country": "Switzerland",
+    "seasons": {
+      "2024": {
+        "league_id": 207,
+        "league_name": "Super League",
+        "country": "Switzerland"
+      }
+    }
+  },
+  "611": {
+    "name": "Fenerbahçe",
+    "country": "Turkey",
+    "seasons": {
+      "2024": {
+        "league_id": 203,
+        "league_name": "Süper Lig",
+        "country": "Turkey"
+      },
+      "2025": {
+        "league_id": 203,
+        "league_name": "Süper Lig",
+        "country": "Turkey"
+      }
+    }
+  },
+  "619": {
+    "name": "PAOK",
+    "country": "Greece",
+    "seasons": {
+      "2024": {
+        "league_id": 197,
+        "league_name": "Super League 1",
+        "country": "Greece"
+      }
+    }
+  },
+  "684": {
+    "name": "FC Differdange 03",
+    "country": "Luxembourg",
+    "seasons": {
+      "2024": {
+        "league_id": 261,
+        "league_name": "National Division",
+        "country": "Luxembourg"
+      },
+      "2025": {
+        "league_id": 261,
+        "league_name": "National Division",
+        "country": "Luxembourg"
+      }
+    }
+  },
+  "692": {
+    "name": "Ordabasy",
+    "country": "Kazakhstan",
+    "seasons": {
+      "2024": {
+        "league_id": 389,
+        "league_name": "Premier League",
+        "country": "Kazakhstan"
+      }
+    }
+  },
+  "703": {
+    "name": "UE Santa Coloma",
+    "country": "Andorra",
+    "seasons": {
+      "2024": {
+        "league_id": 312,
+        "league_name": "1a Divisió",
+        "country": "Andorra"
+      }
+    }
+  },
+  "705": {
+    "name": "Dinamo Batumi",
+    "country": "Georgia",
+    "seasons": {
+      "2024": {
+        "league_id": 327,
+        "league_name": "Erovnuli Liga",
+        "country": "Georgia"
+      }
+    }
+  },
+  "709": {
+    "name": "Pyunik Yerevan",
+    "country": "Armenia",
+    "seasons": {
+      "2024": {
+        "league_id": 342,
+        "league_name": "Premier League",
+        "country": "Armenia"
+      }
+    }
+  },
+  "1393": {
+    "name": "Union St. Gilloise",
+    "country": "Belgium",
+    "seasons": {
+      "2024": {
+        "league_id": 144,
+        "league_name": "Jupiler Pro League",
+        "country": "Belgium"
+      },
+      "2025": {
+        "league_id": 144,
+        "league_name": "Jupiler Pro League",
+        "country": "Belgium"
+      }
+    }
+  },
+  "2247": {
+    "name": "Apoel Nicosia",
+    "country": "Cyprus",
+    "seasons": {
+      "2024": {
+        "league_id": 318,
+        "league_name": "1. Division",
+        "country": "Cyprus"
+      }
+    }
+  },
+  "2271": {
+    "name": "Petrocub",
+    "country": "Moldova",
+    "seasons": {
+      "2024": {
+        "league_id": 394,
+        "league_name": "Super Liga",
+        "country": "Moldova"
+      }
+    }
+  },
+  "3327": {
+    "name": "Egnatia Rrogozhinë",
+    "country": "Albania",
+    "seasons": {
+      "2024": {
+        "league_id": 310,
+        "league_name": "Superliga",
+        "country": "Albania"
+      },
+      "2025": {
+        "league_id": 310,
+        "league_name": "Superliga",
+        "country": "Albania"
+      }
+    }
+  },
+  "3364": {
+    "name": "Borac Banja Luka",
+    "country": "Bosnia",
+    "seasons": {
+      "2024": {
+        "league_id": 315,
+        "league_name": "Premijer Liga",
+        "country": "Bosnia"
+      }
+    }
+  },
+  "3745": {
+    "name": "Dečić",
+    "country": "Montenegro",
+    "seasons": {
+      "2024": {
+        "league_id": 355,
+        "league_name": "First League",
+        "country": "Montenegro"
+      }
+    }
+  },
+  "3874": {
+    "name": "Panevėžys",
+    "country": "Lithuania",
+    "seasons": {
+      "2024": {
+        "league_id": 362,
+        "league_name": "A Lyga",
+        "country": "Lithuania"
+      }
+    }
+  },
+  "4160": {
+    "name": "Rīgas FS",
+    "country": "Latvia",
+    "seasons": {
+      "2024": {
+        "league_id": 365,
+        "league_name": "Virsliga",
+        "country": "Latvia"
+      },
+      "2025": {
+        "league_id": 365,
+        "league_name": "Virsliga",
+        "country": "Latvia"
+      }
+    }
+  },
+  "4360": {
+    "name": "Celje",
+    "country": "Slovenia",
+    "seasons": {
+      "2024": {
+        "league_id": 373,
+        "league_name": "1. SNL",
+        "country": "Slovenia"
+      }
+    }
+  },
+  "5308": {
+    "name": "Virtus",
+    "country": "San-Marino",
+    "seasons": {
+      "2024": {
+        "league_id": 404,
+        "league_name": "Campionato",
+        "country": "San-Marino"
+      },
+      "2025": {
+        "league_id": 404,
+        "league_name": "Campionato",
+        "country": "San-Marino"
+      }
+    }
+  },
+  "47": {
+    "name": "Tottenham",
+    "country": "England",
+    "seasons": {
+      "2025": {
+        "league_id": 39,
+        "league_name": "Premier League",
+        "country": "England"
+      }
+    }
+  },
+  "49": {
+    "name": "Chelsea",
+    "country": "England",
+    "seasons": {
+      "2025": {
+        "league_id": 39,
+        "league_name": "Premier League",
+        "country": "England"
+      }
+    }
+  },
+  "84": {
+    "name": "Nice",
+    "country": "France",
+    "seasons": {
+      "2025": {
+        "league_id": 61,
+        "league_name": "Ligue 1",
+        "country": "France"
+      }
+    }
+  },
+  "169": {
+    "name": "Eintracht Frankfurt",
+    "country": "Germany",
+    "seasons": {
+      "2025": {
+        "league_id": 78,
+        "league_name": "Bundesliga",
+        "country": "Germany"
+      }
+    }
+  },
+  "194": {
+    "name": "Ajax",
+    "country": "Netherlands",
+    "seasons": {
+      "2025": {
+        "league_id": 88,
+        "league_name": "Eredivisie",
+        "country": "Netherlands"
+      }
+    }
+  },
+  "319": {
+    "name": "Brann",
+    "country": "Norway",
+    "seasons": {
+      "2025": {
+        "league_id": 103,
+        "league_name": "Eliteserien",
+        "country": "Norway"
+      }
+    }
+  },
+  "347": {
+    "name": "Lech Poznan",
+    "country": "Poland",
+    "seasons": {
+      "2025": {
+        "league_id": 106,
+        "league_name": "Ekstraklasa",
+        "country": "Poland"
+      }
+    }
+  },
+  "531": {
+    "name": "Athletic Club",
+    "country": "Spain",
+    "seasons": {
+      "2025": {
+        "league_id": 140,
+        "league_name": "La Liga",
+        "country": "Spain"
+      }
+    }
+  },
+  "533": {
+    "name": "Villarreal",
+    "country": "Spain",
+    "seasons": {
+      "2025": {
+        "league_id": 140,
+        "league_name": "La Liga",
+        "country": "Spain"
+      }
+    }
+  },
+  "551": {
+    "name": "FC Basel 1893",
+    "country": "Switzerland",
+    "seasons": {
+      "2025": {
+        "league_id": 207,
+        "league_name": "Super League",
+        "country": "Switzerland"
+      }
+    }
+  },
+  "553": {
+    "name": "Olympiakos Piraeus",
+    "country": "Greece",
+    "seasons": {
+      "2025": {
+        "league_id": 197,
+        "league_name": "Super League 1",
+        "country": "Greece"
+      }
+    }
+  },
+  "561": {
+    "name": "HNK Rijeka",
+    "country": "Croatia",
+    "seasons": {
+      "2025": {
+        "league_id": 210,
+        "league_name": "HNL",
+        "country": "Croatia"
+      }
+    }
+  },
+  "567": {
+    "name": "Plzen",
+    "country": "Czech-Republic",
+    "seasons": {
+      "2025": {
+        "league_id": 345,
+        "league_name": "Czech Liga",
+        "country": "Czech-Republic"
+      }
+    }
+  },
+  "580": {
+    "name": "Vikingur Gota",
+    "country": "Faroe-Islands",
+    "seasons": {
+      "2025": {
+        "league_id": 367,
+        "league_name": "Meistaradeildin",
+        "country": "Faroe-Islands"
+      }
+    }
+  },
+  "583": {
+    "name": "Linfield",
+    "country": "Northern-Ireland",
+    "seasons": {
+      "2025": {
+        "league_id": 408,
+        "league_name": "Premiership",
+        "country": "Northern-Ireland"
+      }
+    }
+  },
+  "609": {
+    "name": "Shkendija",
+    "country": "Macedonia",
+    "seasons": {
+      "2025": {
+        "league_id": 371,
+        "league_name": "First League",
+        "country": "Macedonia"
+      }
+    }
+  },
+  "664": {
+    "name": "Kairat Almaty",
+    "country": "Kazakhstan",
+    "seasons": {
+      "2025": {
+        "league_id": 389,
+        "league_name": "Premier League",
+        "country": "Kazakhstan"
+      }
+    }
+  },
+  "691": {
+    "name": "Milsami Orhei",
+    "country": "Moldova",
+    "seasons": {
+      "2025": {
+        "league_id": 394,
+        "league_name": "Super Liga",
+        "country": "Moldova"
+      }
+    }
+  },
+  "1165": {
+    "name": "KuPS",
+    "country": "Finland",
+    "seasons": {
+      "2025": {
+        "league_id": 244,
+        "league_name": "Veikkausliiga",
+        "country": "Finland"
+      }
+    }
+  },
+  "2273": {
+    "name": "FC Levadia Tallinn",
+    "country": "Estonia",
+    "seasons": {
+      "2025": {
+        "league_id": 329,
+        "league_name": "Meistriliiga",
+        "country": "Estonia"
+      }
+    }
+  },
+  "3342": {
+    "name": "Inter Club d'Escaldes",
+    "country": "Andorra",
+    "seasons": {
+      "2025": {
+        "league_id": 312,
+        "league_name": "1a Divisió",
+        "country": "Andorra"
+      }
+    }
+  },
+  "3403": {
+    "name": "Pafos",
+    "country": "Cyprus",
+    "seasons": {
+      "2025": {
+        "league_id": 318,
+        "league_name": "1. Division",
+        "country": "Cyprus"
+      }
+    }
+  },
+  "3502": {
+    "name": "Saburtalo",
+    "country": "Georgia",
+    "seasons": {
+      "2025": {
+        "league_id": 327,
+        "league_name": "Erovnuli Liga",
+        "country": "Georgia"
+      }
+    }
+  },
+  "3684": {
+    "name": "FC Noah",
+    "country": "Armenia",
+    "seasons": {
+      "2025": {
+        "league_id": 342,
+        "league_name": "Premier League",
+        "country": "Armenia"
+      }
+    }
+  },
+  "3854": {
+    "name": "Shelbourne",
+    "country": "Ireland",
+    "seasons": {
+      "2025": {
+        "league_id": 357,
+        "league_name": "Premier Division",
+        "country": "Ireland"
+      }
+    }
+  },
+  "14281": {
+    "name": "Drita",
+    "country": "Kosovo",
+    "seasons": {
+      "2025": {
+        "league_id": 664,
+        "league_name": "Superliga",
+        "country": "Kosovo"
+      }
+    }
+  }
+}
