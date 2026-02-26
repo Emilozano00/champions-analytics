@@ -1,0 +1,31 @@
+fixture_id,date,status,round,league_id,league_name,home_team,home_team_id,away_team,away_team_id,home_goals,away_goals,ht_home,ht_away
+1515528,2026-02-25T20:00:00+00:00,FT,Round of 32,2,Champions League,Paris Saint Germain,85,Monaco,91,2,2,0,1
+1515529,2026-02-25T20:00:00+00:00,FT,Round of 32,2,Champions League,Real Madrid,541,Benfica,211,2,1,1,1
+1515526,2026-02-25T17:45:00+00:00,FT,Round of 32,2,Champions League,Atalanta,499,Borussia Dortmund,165,4,1,2,0
+1515525,2026-02-24T20:00:00+00:00,FT,Round of 32,2,Champions League,Newcastle,34,Qarabag,556,3,2,2,0
+1515523,2026-02-24T20:00:00+00:00,FT,Round of 32,2,Champions League,Bayer Leverkusen,168,Olympiakos Piraeus,553,0,0,0,0
+1515524,2026-02-24T20:00:00+00:00,FT,Round of 32,2,Champions League,Inter,505,Bodo/Glimt,327,1,2,0,0
+1515522,2026-02-24T17:45:00+00:00,FT,Round of 32,2,Champions League,Atletico Madrid,530,Club Brugge KV,569,4,1,1,1
+1515536,2026-02-19T20:00:00+00:00,FT,Round of 32,3,Europa League,Ludogorets,566,Ferencvarosi TC,651,2,1,1,1
+1508935,2026-02-19T20:00:00+00:00,FT,Round of 32,848,Conference League,Omonia Nicosia,3402,HNK Rijeka,561,0,1,0,0
+1508931,2026-02-19T20:00:00+00:00,FT,Round of 32,848,Conference League,Drita,14281,Celje,4360,2,3,0,2
+1515537,2026-02-19T20:00:00+00:00,FT,Round of 32,3,Europa League,Panathinaikos,617,Plzen,567,2,2,1,1
+1508936,2026-02-19T20:00:00+00:00,FT,Round of 32,848,Conference League,Shkendija,609,Samsunspor,3603,0,1,0,0
+1515534,2026-02-19T20:00:00+00:00,FT,Round of 32,3,Europa League,Celtic,247,VfB Stuttgart,172,1,4,1,2
+1515535,2026-02-19T20:00:00+00:00,FT,Round of 32,3,Europa League,Lille,79,FK Crvena Zvezda,598,0,1,0,1
+1508932,2026-02-19T20:00:00+00:00,FT,Round of 32,848,Conference League,Jagiellonia,336,Fiorentina,502,0,3,0,0
+1508938,2026-02-19T17:45:00+00:00,FT,Round of 32,848,Conference League,Zrinjski,588,Crystal Palace,52,1,1,0,1
+1508937,2026-02-19T17:45:00+00:00,FT,Round of 32,848,Conference League,Sigma Olomouc,2250,Lausanne,1014,1,1,0,1
+1508934,2026-02-19T17:45:00+00:00,FT,Round of 32,848,Conference League,FC Noah,3684,AZ Alkmaar,201,1,0,0,0
+1508933,2026-02-19T17:45:00+00:00,FT,Round of 32,848,Conference League,KuPS,1165,Lech Poznan,347,0,2,0,2
+1515532,2026-02-19T17:45:00+00:00,FT,Round of 32,3,Europa League,Fenerbahçe,611,Nottingham Forest,65,0,3,0,2
+1515531,2026-02-19T17:45:00+00:00,FT,Round of 32,3,Europa League,Dinamo Zagreb,620,Genk,742,1,3,1,2
+1515533,2026-02-19T17:45:00+00:00,FT,Round of 32,3,Europa League,PAOK,619,Celta Vigo,538,1,2,0,2
+1515530,2026-02-19T17:45:00+00:00,FT,Round of 32,3,Europa League,Brann,319,Bologna,500,0,1,0,1
+1515520,2026-02-18T20:00:00+00:00,FT,Round of 32,2,Champions League,Club Brugge KV,569,Atletico Madrid,530,3,3,0,2
+1515521,2026-02-18T20:00:00+00:00,FT,Round of 32,2,Champions League,Olympiakos Piraeus,553,Bayer Leverkusen,168,0,2,0,0
+1515519,2026-02-18T20:00:00+00:00,FT,Round of 32,2,Champions League,Bodo/Glimt,327,Inter,505,3,1,1,1
+1451297,2026-01-29T20:00:00+00:00,FT,League Stage - 8,3,Europa League,Aston Villa,66,Red Bull Salzburg,571,3,2,0,1
+1451299,2026-01-29T20:00:00+00:00,FT,League Stage - 8,3,Europa League,Nottingham Forest,65,Ferencvarosi TC,651,4,0,2,0
+1451447,2025-12-18T20:00:00+00:00,FT,League Stage - 6,848,Conference League,Crystal Palace,52,KuPS,1165,2,2,1,0
+1451448,2025-12-18T20:00:00+00:00,FT,League Stage - 6,848,Conference League,Strasbourg,95,Breidablik,276,3,1,1,1

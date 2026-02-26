@@ -111,10 +111,35 @@ def load_original_metrics():
 
 
 @st.cache_data
-def load_upcoming_fixtures():
-    path = PROCESSED_DIR / "upcoming.csv"
+def load_upcoming_matches():
+    """Load upcoming fixtures from 11_update_fixtures.py output (all competitions)."""
+    path = PROCESSED_DIR / "upcoming_matches.csv"
     if path.exists():
-        return pd.read_csv(path)
+        df = pd.read_csv(path)
+        if len(df) > 0:
+            df["date"] = pd.to_datetime(df["date"])
+        return df
+    # Fallback to old format
+    path_old = PROCESSED_DIR / "upcoming.csv"
+    if path_old.exists():
+        df = pd.read_csv(path_old)
+        if len(df) > 0:
+            df["date"] = pd.to_datetime(df["date"])
+            df["league_name"] = "Champions League"
+            df["status"] = "NS"
+        return df
+    return pd.DataFrame()
+
+
+@st.cache_data
+def load_recent_results():
+    """Load recent results from 11_update_fixtures.py output (all competitions)."""
+    path = PROCESSED_DIR / "recent_results.csv"
+    if path.exists():
+        df = pd.read_csv(path)
+        if len(df) > 0:
+            df["date"] = pd.to_datetime(df["date"])
+        return df
     return pd.DataFrame()
 
 
@@ -405,10 +430,21 @@ model, le, feature_list = load_competition_model(selected_comp)
 all_features_df = load_all_features()
 comp_features_df = all_features_df[all_features_df[comp_cfg["comp_filter"]] == 1].copy()
 
-# Also load CL-specific data for backward compat
+# Also load shared data
 original_metrics = load_original_metrics()
-upcoming_df = load_upcoming_fixtures()
+all_upcoming_df = load_upcoming_matches()
+all_recent_df = load_recent_results()
 odds_data = load_odds()
+
+# Filter upcoming & recent for selected competition
+comp_upcoming_df = (
+    all_upcoming_df[all_upcoming_df["league_name"] == selected_comp]
+    if len(all_upcoming_df) > 0 else pd.DataFrame()
+)
+comp_recent_df = (
+    all_recent_df[all_recent_df["league_name"] == selected_comp]
+    if len(all_recent_df) > 0 else pd.DataFrame()
+)
 
 # Season 2025 for selected competition
 s25 = comp_features_df[comp_features_df["season"] == 2025].sort_values("date", ascending=False)
@@ -431,17 +467,37 @@ tab1, tab2, tab3, tab4 = st.tabs([
 
 # ===== TAB 1: Competition Today =====
 with tab1:
-    st.header(f"{selected_comp} 2025")
+    st.header(f"{comp_cfg['icon']} {selected_comp} 2025/26")
 
-    # Upcoming matches (only for Champions — we only have CL upcoming data)
-    if selected_comp == "Champions League" and len(upcoming_df) > 0:
-        current_round = upcoming_df.iloc[0]["round"]
+    # Current phase info
+    if len(comp_upcoming_df) > 0:
+        current_round = comp_upcoming_df.iloc[0]["round"]
+        first_match_date = comp_upcoming_df["date"].min()
         st.markdown(f"**Fase actual:** {current_round}")
+        st.markdown(f"**Proximo partido:** {first_match_date.strftime('%d %b %Y')}")
+    elif len(comp_recent_df) > 0:
+        last_round = comp_recent_df.iloc[0]["round"]
+        st.markdown(f"**Ultima fase disputada:** {last_round}")
 
-        st.subheader("Proximos Partidos")
-        for _, match in upcoming_df.iterrows():
+    # Calendar (CL specific)
+    if selected_comp == "Champions League":
+        with st.expander("Calendario Champions League 2025/26"):
+            st.markdown("""
+            | Fase | Ida | Vuelta |
+            |---|---|---|
+            | Knockout Play-offs | 18-19 feb | 25-26 feb |
+            | **Octavos de Final** | **10-11 mar** | **17-18 mar** |
+            | Cuartos de Final | 7-8 abr | 14-15 abr |
+            | Semifinales | 28-29 abr | 5-6 may |
+            | **Final (Budapest)** | **30 mayo** | |
+            """)
+
+    # Upcoming matches
+    st.subheader("Proximos Partidos")
+    if len(comp_upcoming_df) > 0:
+        for _, match in comp_upcoming_df.iterrows():
             fid = match["fixture_id"]
-            date_str = pd.to_datetime(match["date"]).strftime("%d %b %H:%M")
+            date_str = match["date"].strftime("%d %b %H:%M")
             odds_str = ""
             if fid in odds_data:
                 o = odds_data[fid]
@@ -455,14 +511,34 @@ with tab1:
                 unsafe_allow_html=True,
             )
     else:
-        if selected_comp != "Champions League":
-            st.info(f"Datos de proximos partidos solo disponibles para Champions League por ahora.")
-        elif len(upcoming_df) == 0:
-            st.info("No hay partidos pendientes en este momento.")
+        if selected_comp == "Champions League":
+            st.info("No hay partidos programados. Ejecuta `python3 11_update_fixtures.py` para actualizar.")
+        else:
+            st.info(f"No hay partidos programados para {selected_comp}. Ejecuta `python3 11_update_fixtures.py` para actualizar.")
 
-    # Recent results
+    # Recent results (from 11_update_fixtures.py or fallback to features_all)
     st.subheader("Resultados Recientes")
-    if len(s25) > 0:
+    if len(comp_recent_df) > 0:
+        for _, r in comp_recent_df.head(10).iterrows():
+            date_str = r["date"].strftime("%d %b")
+            hg = int(r["home_goals"]) if pd.notna(r["home_goals"]) else 0
+            ag = int(r["away_goals"]) if pd.notna(r["away_goals"]) else 0
+            if hg > ag:
+                score_display = f"**{r['home_team']}** {hg}-{ag} {r['away_team']}"
+            elif ag > hg:
+                score_display = f"{r['home_team']} {hg}-{ag} **{r['away_team']}**"
+            else:
+                score_display = f"{r['home_team']} {hg}-{ag} {r['away_team']}"
+
+            st.markdown(
+                f'<div class="match-card">'
+                f'<strong>{date_str}</strong> — {score_display}'
+                f'<br><small>{r["round"]}</small>'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+    elif len(s25) > 0:
+        # Fallback to features_all data
         recent = s25.head(10)
         for _, r in recent.iterrows():
             date_str = pd.to_datetime(r["date"]).strftime("%d %b")
@@ -483,13 +559,32 @@ with tab1:
                 unsafe_allow_html=True,
             )
     else:
-        st.info(f"No hay resultados de 2025 para {selected_comp}.")
+        st.info(f"No hay resultados recientes para {selected_comp}.")
 
 
 # ===== TAB 2: Prediction =====
 with tab2:
     st.header("Prediccion de Partido")
     st.caption(f"Modelo: {selected_comp} ({comp_cfg['algorithm']})")
+
+    # Quick-pick from upcoming matches
+    home_default = None
+    away_default = None
+    if len(comp_upcoming_df) > 0:
+        st.subheader("Partidos programados")
+        quick_options = ["Seleccionar manualmente..."]
+        match_lookup = {}
+        for _, m in comp_upcoming_df.iterrows():
+            date_str = m["date"].strftime("%d %b")
+            label = f"{date_str}: {m['home_team']} vs {m['away_team']}"
+            quick_options.append(label)
+            match_lookup[label] = (m["home_team"], m["away_team"])
+
+        quick_pick = st.selectbox("Partido rapido", quick_options, index=0, label_visibility="collapsed")
+        if quick_pick != "Seleccionar manualmente..." and quick_pick in match_lookup:
+            home_default, away_default = match_lookup[quick_pick]
+
+        st.markdown("---")
 
     # Teams from selected competition (2025 season preferred, fallback to all)
     if len(s25) > 0:
@@ -501,17 +596,36 @@ with tab2:
             set(comp_features_df["home_team_name"].unique()) | set(comp_features_df["away_team_name"].unique())
         )
 
+    # Set default indices if quick-pick was used
+    home_idx = None
+    away_idx = None
+    if home_default and home_default in teams:
+        home_idx = teams.index(home_default)
+    if away_default and away_default in teams:
+        away_idx = teams.index(away_default)
+
     col_home, col_away = st.columns(2)
     with col_home:
-        home_team = st.selectbox("Equipo Local", teams, index=None, placeholder="Selecciona equipo local")
+        home_team = st.selectbox(
+            "Equipo Local", teams,
+            index=home_idx, placeholder="Selecciona equipo local",
+        )
     with col_away:
-        away_team = st.selectbox("Equipo Visitante", teams, index=None, placeholder="Selecciona equipo visitante")
+        away_team = st.selectbox(
+            "Equipo Visitante", teams,
+            index=away_idx, placeholder="Selecciona equipo visitante",
+        )
 
+    # Detect knockout phase from upcoming data
     knockout_pattern = r"(Round of|Quarter|Semi|Final|Play-offs|Knockout)"
     is_knockout = 0
-    if selected_comp == "Champions League" and len(upcoming_df) > 0:
-        current_round_str = upcoming_df.iloc[0]["round"]
+    if len(comp_upcoming_df) > 0:
+        current_round_str = comp_upcoming_df.iloc[0]["round"]
         if re.search(knockout_pattern, current_round_str, re.IGNORECASE):
+            is_knockout = 1
+    elif len(comp_recent_df) > 0:
+        last_round_str = comp_recent_df.iloc[0]["round"]
+        if re.search(knockout_pattern, last_round_str, re.IGNORECASE):
             is_knockout = 1
 
     predict_btn = st.button("Predecir", type="primary")
@@ -631,10 +745,10 @@ with tab2:
 
             st.dataframe(pd.DataFrame(compare_data), height=330)
 
-            # Odds comparison (CL only — we only have CL odds)
-            if selected_comp == "Champions League":
-                matching_odds = None
-                for _, um in upcoming_df.iterrows():
+            # Odds comparison (any competition with odds data)
+            matching_odds = None
+            if len(comp_upcoming_df) > 0:
+                for _, um in comp_upcoming_df.iterrows():
                     if um["home_team"] == home_team and um["away_team"] == away_team:
                         fid = um["fixture_id"]
                         if fid in odds_data:
