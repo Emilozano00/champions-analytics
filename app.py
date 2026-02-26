@@ -1,7 +1,7 @@
 """
-⚽ Champions League Predictor
-Streamlit app for Champions League match outcome prediction.
-Uses final model: Logistic Regression calibrada, 20 features, accuracy 57.2%.
+European Football Predictor
+Streamlit app for Champions League, Europa League & Conference League prediction.
+Three independent models: CL 57.2%, EL 59.4%, ECL 52.7%.
 """
 
 import json
@@ -19,7 +19,7 @@ import streamlit as st
 # ---------------------------------------------------------------------------
 
 st.set_page_config(
-    page_title="Champions League Predictor",
+    page_title="European Football Predictor",
     page_icon="⚽",
     layout="wide",
 )
@@ -29,22 +29,73 @@ MODELS_DIR = BASE_DIR / "models"
 DATA_DIR = BASE_DIR / "data"
 PROCESSED_DIR = DATA_DIR / "processed"
 
+# Competition registry
+COMPETITIONS = {
+    "Champions League": {
+        "icon": "🏆",
+        "model_pkl": "champion_model_final.pkl",
+        "feature_json": "feature_list_final.json",
+        "metrics_json": "metrics_final.json",
+        "comp_filter": "is_champions",
+        "league_id": 2,
+        "color": "#d4af37",
+        "algorithm": "LogReg calibrada",
+        "matches": 709,
+    },
+    "Europa League": {
+        "icon": "🥈",
+        "model_pkl": "europa_model.pkl",
+        "feature_json": "europa_feature_list.json",
+        "metrics_json": "europa_metrics.json",
+        "comp_filter": "is_europa",
+        "league_id": 3,
+        "color": "#F57C00",
+        "algorithm": "Random Forest",
+        "matches": 650,
+    },
+    "Conference League": {
+        "icon": "🥉",
+        "model_pkl": "conference_model.pkl",
+        "feature_json": "conference_feature_list.json",
+        "metrics_json": "conference_metrics.json",
+        "comp_filter": "is_conference",
+        "league_id": 848,
+        "color": "#66BB6A",
+        "algorithm": "Random Forest",
+        "matches": 1112,
+    },
+}
+
 
 # ---------------------------------------------------------------------------
 # Data loading (cached)
 # ---------------------------------------------------------------------------
 
 @st.cache_resource
-def load_model():
-    model = joblib.load(MODELS_DIR / "champion_model_final.pkl")
+def load_competition_model(comp_name):
+    cfg = COMPETITIONS[comp_name]
+    model = joblib.load(MODELS_DIR / cfg["model_pkl"])
     le = joblib.load(MODELS_DIR / "label_encoder.pkl")
-    with open(MODELS_DIR / "feature_list_final.json") as f:
+    with open(MODELS_DIR / cfg["feature_json"]) as f:
         feature_list = json.load(f)
     return model, le, feature_list
 
 
 @st.cache_data
-def load_features():
+def load_competition_metrics(comp_name):
+    cfg = COMPETITIONS[comp_name]
+    with open(MODELS_DIR / cfg["metrics_json"]) as f:
+        return json.load(f)
+
+
+@st.cache_data
+def load_all_features():
+    return pd.read_csv(PROCESSED_DIR / "features_all.csv", low_memory=False)
+
+
+@st.cache_data
+def load_cl_features():
+    """Load CL-only features for backward compat (calibration chart uses metrics.json)."""
     return pd.read_csv(PROCESSED_DIR / "features_v3.csv")
 
 
@@ -54,20 +105,13 @@ def load_matches():
 
 
 @st.cache_data
-def load_metrics():
+def load_original_metrics():
     with open(MODELS_DIR / "metrics.json") as f:
         return json.load(f)
 
 
 @st.cache_data
-def load_metrics_final():
-    with open(MODELS_DIR / "metrics_final.json") as f:
-        return json.load(f)
-
-
-@st.cache_data
 def load_upcoming_fixtures():
-    """Load upcoming fixtures from processed CSV."""
     path = PROCESSED_DIR / "upcoming.csv"
     if path.exists():
         return pd.read_csv(path)
@@ -76,7 +120,6 @@ def load_upcoming_fixtures():
 
 @st.cache_data
 def load_odds():
-    """Load Pinnacle odds from processed CSV. Returns dict {fixture_id: {Home, Draw, Away}}."""
     path = PROCESSED_DIR / "odds.csv"
     if not path.exists():
         return {}
@@ -96,7 +139,6 @@ def load_odds():
 # ---------------------------------------------------------------------------
 
 def get_team_form(features_df, team_name, n=5):
-    """Get last N results for a team as list of W/D/L."""
     home_matches = features_df[features_df["home_team_name"] == team_name].copy()
     home_matches["team_result"] = home_matches["result"].map({"H": "W", "D": "D", "A": "L"})
 
@@ -112,14 +154,12 @@ def get_team_form(features_df, team_name, n=5):
 
 
 def get_latest_rolling_features(features_df, team_name, feature_list):
-    """Get the most recent rolling features for a team."""
     home = features_df[features_df["home_team_name"] == team_name].sort_values("date")
     away = features_df[features_df["away_team_name"] == team_name].sort_values("date")
 
     home_latest = home.iloc[-1] if len(home) > 0 else None
     away_latest = away.iloc[-1] if len(away) > 0 else None
 
-    # Pick whichever is more recent
     if home_latest is not None and away_latest is not None:
         if home_latest["date"] >= away_latest["date"]:
             latest = home_latest
@@ -134,8 +174,6 @@ def get_latest_rolling_features(features_df, team_name, feature_list):
         latest = away_latest
         prefix = "away_"
 
-    # Extract rolling features for this team
-    rolling_data = {}
     rolling_keys = [
         "rolling_xg_for", "rolling_xg_against", "rolling_xg_diff",
         "rolling_goals_for", "rolling_goals_against",
@@ -146,6 +184,7 @@ def get_latest_rolling_features(features_df, team_name, feature_list):
         "rolling_key_passes", "rolling_duels_won_pct",
         "rolling_dribbles_success", "rolling_points",
     ]
+    rolling_data = {}
     for key in rolling_keys:
         col = f"{prefix}{key}"
         rolling_data[key] = latest.get(col, np.nan) if latest is not None else np.nan
@@ -157,7 +196,6 @@ def get_latest_rolling_features(features_df, team_name, feature_list):
 
 
 def get_team_elo(features_df, team_name):
-    """Get the latest ELO rating for a team from historical match data."""
     home = features_df[features_df["home_team_name"] == team_name].sort_values("date")
     away = features_df[features_df["away_team_name"] == team_name].sort_values("date")
 
@@ -177,9 +215,6 @@ def get_team_elo(features_df, team_name):
 
 
 def get_domestic_features(features_df, team_name, role):
-    """Get latest domestic features for a team.
-    role: 'home' or 'away' — determines which domestic columns to extract.
-    """
     if role == "home":
         matches = features_df[features_df["home_team_name"] == team_name].sort_values("date")
         cols = [
@@ -202,9 +237,6 @@ def get_domestic_features(features_df, team_name, role):
 
 
 def build_prediction_row(features_df, home_team, away_team, feature_list, is_knockout):
-    """Build a feature row for prediction from the latest available rolling stats.
-    Returns (X array for model, elo_info dict for display).
-    """
     home_rolling = get_latest_rolling_features(features_df, home_team, feature_list)
     away_rolling = get_latest_rolling_features(features_df, away_team, feature_list)
 
@@ -226,7 +258,6 @@ def build_prediction_row(features_df, home_team, away_team, feature_list, is_kno
     row["home_days_since_last"] = home_rolling.get("days_since_last", np.nan)
     row["away_days_since_last"] = away_rolling.get("days_since_last", np.nan)
 
-    # Derived features
     row["diff_rolling_xg"] = (
         row.get("home_rolling_xg_for", np.nan) - row.get("away_rolling_xg_for", np.nan)
         if not (pd.isna(row.get("home_rolling_xg_for")) or pd.isna(row.get("away_rolling_xg_for")))
@@ -244,7 +275,12 @@ def build_prediction_row(features_df, home_team, away_team, feature_list, is_kno
     )
     row["is_knockout"] = is_knockout
 
-    # ELO features
+    # Competition flags
+    row["is_champions"] = 0
+    row["is_europa"] = 0
+    row["is_conference"] = 0
+
+    # ELO
     elo_home = get_team_elo(features_df, home_team)
     elo_away = get_team_elo(features_df, away_team)
     row["elo_home"] = elo_home
@@ -256,33 +292,29 @@ def build_prediction_row(features_df, home_team, away_team, feature_list, is_kno
         row["elo_diff"] = np.nan
         row["elo_expected_home"] = np.nan
 
-    # Domestic features
+    # Domestic
     home_dom = get_domestic_features(features_df, home_team, "home")
     away_dom = get_domestic_features(features_df, away_team, "away")
     row.update(home_dom)
     row.update(away_dom)
 
-    # ELO info for display in prediction tab
     elo_info = {
         "elo_home": elo_home,
         "elo_away": elo_away,
         "elo_diff": row.get("elo_diff", np.nan),
     }
 
-    # Build array in feature_list order
     X = np.array([[row.get(f, np.nan) for f in feature_list]])
     return X, elo_info
 
 
 def odds_to_probs(odds_dict):
-    """Convert decimal odds to normalized implied probabilities."""
     raw = {k: 1.0 / v for k, v in odds_dict.items()}
     total = sum(raw.values())
     return {k: v / total for k, v in raw.items()}
 
 
 def form_badge(result):
-    """Return a colored badge for W/D/L."""
     if result == "W":
         return "🟢 W"
     elif result == "D":
@@ -355,51 +387,58 @@ st.markdown("""
 
 
 # ---------------------------------------------------------------------------
-# App header
+# App header + competition selector
 # ---------------------------------------------------------------------------
 
-st.markdown('<p class="main-header">⚽ Champions League Predictor</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">Predicciones basadas en datos para la UEFA Champions League</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-header">⚽ European Football Predictor</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-header">Champions League &bull; Europa League &bull; Conference League</p>', unsafe_allow_html=True)
 
-# Load everything
-model, le, feature_list = load_model()
-features_df = load_features()
-matches_df = load_matches()
-metrics = load_metrics()
-metrics_final = load_metrics_final()
+# Competition selector
+comp_options = [f"{cfg['icon']} {name}" for name, cfg in COMPETITIONS.items()]
+selected_label = st.selectbox("Selecciona competicion", comp_options, index=0, label_visibility="collapsed")
+# Extract name without icon
+selected_comp = selected_label.split(" ", 1)[1]
+comp_cfg = COMPETITIONS[selected_comp]
+
+# Load data for selected competition
+model, le, feature_list = load_competition_model(selected_comp)
+all_features_df = load_all_features()
+comp_features_df = all_features_df[all_features_df[comp_cfg["comp_filter"]] == 1].copy()
+
+# Also load CL-specific data for backward compat
+original_metrics = load_original_metrics()
 upcoming_df = load_upcoming_fixtures()
 odds_data = load_odds()
 
-# Determine current phase
-s25 = features_df[features_df["season"] == 2025].sort_values("date", ascending=False)
-last_date = pd.to_datetime(s25.iloc[0]["date"]).strftime("%d %b %Y")
+# Season 2025 for selected competition
+s25 = comp_features_df[comp_features_df["season"] == 2025].sort_values("date", ascending=False)
+if len(s25) > 0:
+    last_date = pd.to_datetime(s25.iloc[0]["date"]).strftime("%d %b %Y")
+else:
+    last_date = "N/A"
+
 
 # ---------------------------------------------------------------------------
 # TABS
 # ---------------------------------------------------------------------------
 
 tab1, tab2, tab3, tab4 = st.tabs([
-    "🏆 Champions League Hoy",
-    "🔮 Predicción de Partido",
+    f"{comp_cfg['icon']} {selected_comp} Hoy",
+    "🔮 Prediccion de Partido",
     "📈 Rendimiento del Modelo",
-    "ℹ️ Metodología",
+    "ℹ️ Metodologia",
 ])
 
-# ===== TAB 1: Champions League Hoy =====
+# ===== TAB 1: Competition Today =====
 with tab1:
-    st.header("Champions League 2025")
+    st.header(f"{selected_comp} 2025")
 
-    # Current phase
-    if len(upcoming_df) > 0:
+    # Upcoming matches (only for Champions — we only have CL upcoming data)
+    if selected_comp == "Champions League" and len(upcoming_df) > 0:
         current_round = upcoming_df.iloc[0]["round"]
         st.markdown(f"**Fase actual:** {current_round}")
-    else:
-        current_round = s25.iloc[0]["round"]
-        st.markdown(f"**Última fase disputada:** {current_round}")
 
-    # Upcoming matches
-    st.subheader("Próximos Partidos")
-    if len(upcoming_df) > 0:
+        st.subheader("Proximos Partidos")
         for _, match in upcoming_df.iterrows():
             fid = match["fixture_id"]
             date_str = pd.to_datetime(match["date"]).strftime("%d %b %H:%M")
@@ -416,50 +455,61 @@ with tab1:
                 unsafe_allow_html=True,
             )
     else:
-        st.info("No hay partidos pendientes en este momento.")
+        if selected_comp != "Champions League":
+            st.info(f"Datos de proximos partidos solo disponibles para Champions League por ahora.")
+        elif len(upcoming_df) == 0:
+            st.info("No hay partidos pendientes en este momento.")
 
     # Recent results
     st.subheader("Resultados Recientes")
-    recent = s25.head(10)
-    for _, r in recent.iterrows():
-        date_str = pd.to_datetime(r["date"]).strftime("%d %b")
-        hg = int(r["home_goals"])
-        ag = int(r["away_goals"])
-        if hg > ag:
-            score_display = f"**{r['home_team_name']}** {hg}-{ag} {r['away_team_name']}"
-        elif ag > hg:
-            score_display = f"{r['home_team_name']} {hg}-{ag} **{r['away_team_name']}**"
-        else:
-            score_display = f"{r['home_team_name']} {hg}-{ag} {r['away_team_name']}"
+    if len(s25) > 0:
+        recent = s25.head(10)
+        for _, r in recent.iterrows():
+            date_str = pd.to_datetime(r["date"]).strftime("%d %b")
+            hg = int(r["home_goals"])
+            ag = int(r["away_goals"])
+            if hg > ag:
+                score_display = f"**{r['home_team_name']}** {hg}-{ag} {r['away_team_name']}"
+            elif ag > hg:
+                score_display = f"{r['home_team_name']} {hg}-{ag} **{r['away_team_name']}**"
+            else:
+                score_display = f"{r['home_team_name']} {hg}-{ag} {r['away_team_name']}"
 
-        st.markdown(
-            f'<div class="match-card">'
-            f'<strong>{date_str}</strong> — {score_display}'
-            f'<br><small>{r["round"]}</small>'
-            f'</div>',
-            unsafe_allow_html=True,
-        )
+            st.markdown(
+                f'<div class="match-card">'
+                f'<strong>{date_str}</strong> — {score_display}'
+                f'<br><small>{r["round"]}</small>'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+    else:
+        st.info(f"No hay resultados de 2025 para {selected_comp}.")
 
 
-# ===== TAB 2: Predicción de Partido =====
+# ===== TAB 2: Prediction =====
 with tab2:
-    st.header("Predicción de Partido")
+    st.header("Prediccion de Partido")
+    st.caption(f"Modelo: {selected_comp} ({comp_cfg['algorithm']})")
 
-    # Teams from 2025 season
-    teams_2025 = sorted(
-        set(s25["home_team_name"].unique()) | set(s25["away_team_name"].unique())
-    )
+    # Teams from selected competition (2025 season preferred, fallback to all)
+    if len(s25) > 0:
+        teams = sorted(
+            set(s25["home_team_name"].unique()) | set(s25["away_team_name"].unique())
+        )
+    else:
+        teams = sorted(
+            set(comp_features_df["home_team_name"].unique()) | set(comp_features_df["away_team_name"].unique())
+        )
 
     col_home, col_away = st.columns(2)
     with col_home:
-        home_team = st.selectbox("Equipo Local", teams_2025, index=None, placeholder="Selecciona equipo local")
+        home_team = st.selectbox("Equipo Local", teams, index=None, placeholder="Selecciona equipo local")
     with col_away:
-        away_team = st.selectbox("Equipo Visitante", teams_2025, index=None, placeholder="Selecciona equipo visitante")
+        away_team = st.selectbox("Equipo Visitante", teams, index=None, placeholder="Selecciona equipo visitante")
 
-    # Determine if this is a knockout matchup
     knockout_pattern = r"(Round of|Quarter|Semi|Final|Play-offs|Knockout)"
     is_knockout = 0
-    if len(upcoming_df) > 0:
+    if selected_comp == "Champions League" and len(upcoming_df) > 0:
         current_round_str = upcoming_df.iloc[0]["round"]
         if re.search(knockout_pattern, current_round_str, re.IGNORECASE):
             is_knockout = 1
@@ -470,18 +520,16 @@ with tab2:
         if home_team == away_team:
             st.error("Selecciona dos equipos diferentes.")
         else:
-            # Build prediction
-            X, elo_info = build_prediction_row(features_df, home_team, away_team, feature_list, is_knockout)
+            # Use competition-filtered data for rolling features
+            X, elo_info = build_prediction_row(comp_features_df, home_team, away_team, feature_list, is_knockout)
             proba = model.predict_proba(X)[0]
             classes = list(le.classes_)
 
-            # Map probabilities
             prob_dict = {c: p for c, p in zip(classes, proba)}
             p_home = prob_dict.get("H", 0)
             p_draw = prob_dict.get("D", 0)
             p_away = prob_dict.get("A", 0)
 
-            # Display probabilities
             st.markdown("---")
             c1, c2, c3 = st.columns(3)
             with c1:
@@ -518,50 +566,49 @@ with tab2:
             else:
                 st.markdown(f"El modelo favorece **{outcome}** con **{max_prob:.0%}** de probabilidad.")
 
-            # Confidence level
             if max_prob > 0.50:
-                st.success("🟢 Confianza alta — El modelo tiene una opinión clara")
+                st.success("🟢 Confianza alta — El modelo tiene una opinion clara")
             elif max_prob >= 0.40:
-                st.warning("🟡 Confianza media — Partido parejo, podría ir para cualquier lado")
+                st.warning("🟡 Confianza media — Partido parejo, podria ir para cualquier lado")
             else:
-                st.error("🔴 Confianza baja — Mucha incertidumbre, no confíes ciegamente")
+                st.error("🔴 Confianza baja — Mucha incertidumbre, no confies ciegamente")
 
-            # ELO strength comparison
+            # ELO strength
             if not pd.isna(elo_info.get("elo_diff", np.nan)):
                 elo_diff = elo_info["elo_diff"]
                 if abs(elo_diff) > 10:
                     stronger = home_team if elo_diff > 0 else away_team
-                    st.markdown(f"**Diferencia de fuerza (ELO):** {stronger} es **{abs(elo_diff):.0f} puntos** más fuerte históricamente")
+                    st.markdown(f"**Diferencia de fuerza (ELO):** {stronger} es **{abs(elo_diff):.0f} puntos** mas fuerte historicamente")
                 else:
                     st.markdown(f"**Diferencia de fuerza (ELO):** Equipos de nivel similar ({abs(elo_diff):.0f} puntos de diferencia)")
 
-            # Form section
+            # Form
             st.markdown("---")
             st.subheader("Forma Reciente")
             col_f1, col_f2 = st.columns(2)
             with col_f1:
                 st.markdown(f"**{home_team}**")
-                form_home = get_team_form(features_df, home_team)
+                form_home = get_team_form(comp_features_df, home_team)
                 form_str = " ".join(form_badge(r["team_result"]) for _, r in form_home.iterrows())
                 st.markdown(form_str)
             with col_f2:
                 st.markdown(f"**{away_team}**")
-                form_away = get_team_form(features_df, away_team)
+                form_away = get_team_form(comp_features_df, away_team)
                 form_str = " ".join(form_badge(r["team_result"]) for _, r in form_away.iterrows())
                 st.markdown(form_str)
 
             # Rolling stats comparison
-            st.subheader("Comparación de Stats (promedio últimos 5 partidos)")
-            home_rolling = get_latest_rolling_features(features_df, home_team, feature_list)
-            away_rolling = get_latest_rolling_features(features_df, away_team, feature_list)
+            st.subheader("Comparacion de Stats (promedio ultimos 5 partidos)")
+            home_rolling = get_latest_rolling_features(comp_features_df, home_team, feature_list)
+            away_rolling = get_latest_rolling_features(comp_features_df, away_team, feature_list)
 
             stats_display = [
                 ("Goles Esperados (xG)", "rolling_xg_for", ".2f"),
                 ("Goles Anotados", "rolling_goals_for", ".1f"),
                 ("Goles Recibidos", "rolling_goals_against", ".1f"),
                 ("Tiros a Puerta", "rolling_shots_on_goal", ".1f"),
-                ("Posesión (%)", "rolling_possession", ".1f"),
-                ("Precisión Pases (%)", "rolling_pass_accuracy", ".1f"),
+                ("Posesion (%)", "rolling_possession", ".1f"),
+                ("Precision Pases (%)", "rolling_pass_accuracy", ".1f"),
                 ("Puntos (forma)", "rolling_points", ".1f"),
             ]
 
@@ -575,7 +622,6 @@ with tab2:
                     away_team: f"{a_val:{fmt}}" if not pd.isna(a_val) else "—",
                 })
 
-            # Add ELO to comparison if available
             if not pd.isna(elo_info.get("elo_home", np.nan)):
                 compare_data.append({
                     "Stat": "ELO Rating",
@@ -585,171 +631,214 @@ with tab2:
 
             st.dataframe(pd.DataFrame(compare_data), height=330)
 
-            # Odds comparison
-            # Find if there's a matching fixture in upcoming
-            matching_odds = None
-            for _, um in upcoming_df.iterrows():
-                if um["home_team"] == home_team and um["away_team"] == away_team:
-                    fid = um["fixture_id"]
-                    if fid in odds_data:
-                        matching_odds = odds_data[fid]
-                    break
+            # Odds comparison (CL only — we only have CL odds)
+            if selected_comp == "Champions League":
+                matching_odds = None
+                for _, um in upcoming_df.iterrows():
+                    if um["home_team"] == home_team and um["away_team"] == away_team:
+                        fid = um["fixture_id"]
+                        if fid in odds_data:
+                            matching_odds = odds_data[fid]
+                        break
 
-            if matching_odds:
-                st.markdown("---")
-                st.subheader("📊 ¿Qué dice el mercado?")
+                if matching_odds:
+                    st.markdown("---")
+                    st.subheader("Que dice el mercado?")
 
-                market_probs = odds_to_probs(matching_odds)
-                m_home = market_probs.get("Home", 0)
-                m_draw = market_probs.get("Draw", 0)
-                m_away = market_probs.get("Away", 0)
+                    market_probs = odds_to_probs(matching_odds)
+                    m_home = market_probs.get("Home", 0)
+                    m_draw = market_probs.get("Draw", 0)
+                    m_away = market_probs.get("Away", 0)
 
-                compare_odds = pd.DataFrame({
-                    "": ["Victoria Local", "Empate", "Victoria Visitante"],
-                    "Modelo": [f"{p_home:.0%}", f"{p_draw:.0%}", f"{p_away:.0%}"],
-                    "Mercado (Pinnacle)": [f"{m_home:.0%}", f"{m_draw:.0%}", f"{m_away:.0%}"],
-                    "Diferencia": [
-                        f"{(p_home - m_home):+.0%}",
-                        f"{(p_draw - m_draw):+.0%}",
-                        f"{(p_away - m_away):+.0%}",
-                    ],
-                })
-                st.dataframe(compare_odds, height=145)
+                    compare_odds = pd.DataFrame({
+                        "": ["Victoria Local", "Empate", "Victoria Visitante"],
+                        "Modelo": [f"{p_home:.0%}", f"{p_draw:.0%}", f"{p_away:.0%}"],
+                        "Mercado (Pinnacle)": [f"{m_home:.0%}", f"{m_draw:.0%}", f"{m_away:.0%}"],
+                        "Diferencia": [
+                            f"{(p_home - m_home):+.0%}",
+                            f"{(p_draw - m_draw):+.0%}",
+                            f"{(p_away - m_away):+.0%}",
+                        ],
+                    })
+                    st.dataframe(compare_odds, height=145)
 
-                # Insights
-                diffs = {
-                    f"la victoria de {home_team}": p_home - m_home,
-                    "el empate": p_draw - m_draw,
-                    f"la victoria de {away_team}": p_away - m_away,
-                }
-                for desc, diff in diffs.items():
-                    if abs(diff) > 0.05:
-                        direction = "más probable" if diff > 0 else "menos probable"
-                        st.markdown(f"💡 El modelo ve **{desc}** como **{direction}** que el mercado ({abs(diff):.0%} de diferencia)")
+                    diffs = {
+                        f"la victoria de {home_team}": p_home - m_home,
+                        "el empate": p_draw - m_draw,
+                        f"la victoria de {away_team}": p_away - m_away,
+                    }
+                    for desc, diff in diffs.items():
+                        if abs(diff) > 0.05:
+                            direction = "mas probable" if diff > 0 else "menos probable"
+                            st.markdown(f"El modelo ve **{desc}** como **{direction}** que el mercado ({abs(diff):.0%} de diferencia)")
 
-                st.caption(
-                    "Las casas de apuestas tienen más información que nuestro modelo. "
-                    "Diferencias grandes pueden indicar factores que no capturamos "
-                    "(lesiones, motivación, cambios tácticos, etc.)"
-                )
+                    st.caption(
+                        "Las casas de apuestas tienen mas informacion que nuestro modelo. "
+                        "Diferencias grandes pueden indicar factores que no capturamos "
+                        "(lesiones, motivacion, cambios tacticos, etc.)"
+                    )
 
 
-# ===== TAB 3: Rendimiento del Modelo =====
+# ===== TAB 3: Model Performance =====
 with tab3:
     st.header("Rendimiento del Modelo")
     st.markdown(
-        "Transparencia total: así es cómo rinde nuestro modelo. "
-        "Predecir fútbol es difícil. Nuestro modelo es mejor que tirar una moneda "
-        "pero no es infalible. Úsalo como **una herramienta más**, no como verdad absoluta."
+        "Transparencia total: asi es como rinde cada modelo. "
+        "Predecir futbol es dificil. Nuestros modelos son mejor que tirar una moneda "
+        "pero no son infalibles. Usalos como **una herramienta mas**, no como verdad absoluta."
     )
 
-    # Final model headline metrics
-    best_acc = metrics_final["accuracy"]
-    best_ll = metrics_final["log_loss"]
-    baseline_acc = metrics["averages"]["Baseline (always H)"]["avg_accuracy"]
-    improvement = best_acc - baseline_acc
+    # Comparative table — always visible
+    st.subheader("Comparativa de los 3 Modelos")
+    comp_table = []
+    for name, cfg in COMPETITIONS.items():
+        m = load_competition_metrics(name)
+        acc = m.get("accuracy", 0)
+        ll = m.get("log_loss", 0)
+        f1 = m.get("f1_macro", 0)
+        comp_table.append({
+            "Competicion": f"{cfg['icon']} {name}",
+            "Partidos": cfg["matches"],
+            "Accuracy": f"{acc:.1%}",
+            "Log Loss": f"{ll:.3f}",
+            "F1 Macro": f"{f1:.3f}",
+            "Algoritmo": cfg["algorithm"],
+        })
+    st.dataframe(pd.DataFrame(comp_table), height=145)
 
-    # Key metrics
+    # Why differences
+    st.markdown("""
+    **Por que las diferencias?**
+    - **Europa League (59.4%)** tiene la mayor accuracy porque entrena con datos de EL + Conference League (1,762 partidos),
+      y los equipos de EL tienen mejor cobertura de ELO y datos domesticos que Conference.
+    - **Champions League (57.2%)** tiene menos partidos (709) pero equipos de elite con excelente cobertura de datos.
+    - **Conference League (52.7%)** es la mas dificil: equipos pequenos con poca cobertura de ELO (47%) y
+      datos domesticos (17%), lo que limita las features mas predictivas del modelo.
+    """)
+
+    st.markdown("---")
+
+    # Selected competition details
+    st.subheader(f"Detalle: {comp_cfg['icon']} {selected_comp}")
+
+    comp_metrics = load_competition_metrics(selected_comp)
+    acc = comp_metrics.get("accuracy", 0)
+    ll = comp_metrics.get("log_loss", 0)
+    f1 = comp_metrics.get("f1_macro", 0)
+    n_feat = comp_metrics.get("n_features", 20)
+    n_matches = comp_cfg["matches"]
+
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.metric("Precisión del Modelo", f"{best_acc:.0%}", f"+{improvement:.0%} vs baseline")
+        st.metric("Precision del Modelo", f"{acc:.1%}")
     with col2:
-        st.metric("Partidos Analizados", "709")
+        st.metric("Partidos Analizados", f"{n_matches:,}")
     with col3:
-        st.metric("Variables del Modelo", f"{metrics_final['n_features']}", "seleccionadas de 47")
+        st.metric("Variables del Modelo", f"{n_feat}")
 
-    st.markdown(f"Acierta el resultado en **casi 6 de cada 10 partidos**.")
-    st.markdown(f"Si siempre apostáramos al equipo local, acertaríamos un {baseline_acc:.0%}. Nuestro modelo mejora esto en **{improvement:.0%}**.")
-    st.markdown(f"Logistic Regression calibrada con las **{metrics_final['n_features']} variables más predictivas** — incluyendo ELO ratings, datos domésticos y stats de Champions League. Log loss: **{best_ll:.3f}**.")
+    st.markdown(f"**Algoritmo:** {comp_cfg['algorithm']} | **Log Loss:** {ll:.3f} | **F1 Macro:** {f1:.3f}")
 
-    # Walk-forward results (from original metrics.json for split details)
-    st.subheader("Resultados por Periodo (Walk-Forward)")
-    st.markdown("Evaluamos el modelo de forma temporal: entrenamos con datos pasados y probamos con datos futuros, simulando uso real.")
+    # Training variants for this competition
+    if "all_results" in comp_metrics:
+        st.subheader("Variantes de Entrenamiento")
+        var_data = []
+        for var_name, models in comp_metrics["all_results"].items():
+            for model_name, m in models.items():
+                var_data.append({
+                    "Variante": var_name,
+                    "Modelo": model_name,
+                    "Accuracy": f"{m['accuracy']:.1%}",
+                    "Log Loss": f"{m['log_loss']:.3f}",
+                    "F1 Macro": f"{m['f1_macro']:.3f}",
+                })
+        st.dataframe(pd.DataFrame(var_data), height=350)
 
-    wf_data = []
-    split_names = ["Split 1", "Split 2", "Split 3"]
-    baselines = []
-    for split_name, split_results in metrics["walk_forward_results"].items():
-        bl = split_results.get("Baseline (always H)", {})
-        baselines.append(bl.get("accuracy", 0))
-    for i, ps in enumerate(metrics_final.get("per_split", [])):
-        bl_acc = baselines[i] if i < len(baselines) else 0
-        wf_data.append({
-            "Periodo": split_names[i],
-            "Modelo": f"{ps['accuracy']:.0%}",
-            "Baseline": f"{bl_acc:.0%}",
-            "Log Loss": f"{ps['log_loss']:.3f}",
-            "F1 Macro": f"{ps['f1_macro']:.3f}",
-        })
-    st.dataframe(pd.DataFrame(wf_data), height=145)
+    # CL-specific: walk-forward details and calibration chart
+    if selected_comp == "Champions League":
+        cl_metrics_final = comp_metrics
 
-    # Calibration chart
-    st.subheader("Calibración del Modelo")
-    st.markdown("¿Cuando el modelo dice '50% de probabilidad', realmente pasa el 50% de las veces?")
+        baseline_acc = original_metrics["averages"]["Baseline (always H)"]["avg_accuracy"]
+        improvement = acc - baseline_acc
 
-    # Build calibration from split 3 (most representative)
-    split3_key = [k for k in metrics["walk_forward_results"] if "Split 3" in k][0]
-    rf_split3 = metrics["walk_forward_results"][split3_key]["Random Forest"]
-    cal = rf_split3.get("calibration", {})
+        st.markdown(f"Acierta el resultado en **casi 6 de cada 10 partidos**.")
+        st.markdown(f"Si siempre apostaramos al equipo local, acertariamos un {baseline_acc:.0%}. Nuestro modelo mejora esto en **{improvement:.0%}**.")
 
-    cal_data = pd.DataFrame([
-        {"Resultado": "Victoria Local (H)", "Predicho": cal["H"]["predicted_prob"], "Real": cal["H"]["actual_freq"]},
-        {"Resultado": "Empate (D)", "Predicho": cal["D"]["predicted_prob"], "Real": cal["D"]["actual_freq"]},
-        {"Resultado": "Victoria Visitante (A)", "Predicho": cal["A"]["predicted_prob"], "Real": cal["A"]["actual_freq"]},
-    ])
+        # Walk-forward results
+        st.subheader("Resultados por Periodo (Walk-Forward)")
+        st.markdown("Evaluamos el modelo de forma temporal: entrenamos con datos pasados y probamos con datos futuros, simulando uso real.")
 
-    cal_melted = cal_data.melt(id_vars="Resultado", var_name="Tipo", value_name="Probabilidad")
+        wf_data = []
+        split_names = ["Split 1", "Split 2", "Split 3"]
+        baselines = []
+        for split_name, split_results in original_metrics["walk_forward_results"].items():
+            bl = split_results.get("Baseline (always H)", {})
+            baselines.append(bl.get("accuracy", 0))
+        for i, ps in enumerate(cl_metrics_final.get("per_split", [])):
+            bl_acc = baselines[i] if i < len(baselines) else 0
+            wf_data.append({
+                "Periodo": split_names[i],
+                "Modelo": f"{ps['accuracy']:.0%}",
+                "Baseline": f"{bl_acc:.0%}",
+                "Log Loss": f"{ps['log_loss']:.3f}",
+                "F1 Macro": f"{ps['f1_macro']:.3f}",
+            })
+        st.dataframe(pd.DataFrame(wf_data), height=145)
 
-    chart = alt.Chart(cal_melted).mark_bar().encode(
-        x=alt.X("Tipo:N", title=None, axis=alt.Axis(labelAngle=0)),
-        y=alt.Y("Probabilidad:Q", title="Probabilidad", scale=alt.Scale(domain=[0, 0.6])),
-        color=alt.Color("Tipo:N", scale=alt.Scale(
-            domain=["Predicho", "Real"],
-            range=["#d4af37", "#4CAF50"],
-        )),
-        column=alt.Column("Resultado:N", title=None, header=alt.Header(labelAngle=0)),
-    ).properties(height=300, width=150)
+        # Calibration chart
+        st.subheader("Calibracion del Modelo")
+        st.markdown("Cuando el modelo dice '50% de probabilidad', realmente pasa el 50% de las veces?")
 
-    st.altair_chart(chart)
+        split3_key = [k for k in original_metrics["walk_forward_results"] if "Split 3" in k][0]
+        rf_split3 = original_metrics["walk_forward_results"][split3_key]["Random Forest"]
+        cal = rf_split3.get("calibration", {})
 
-    # Performance by phase
-    st.subheader("Rendimiento por Fase")
+        cal_data = pd.DataFrame([
+            {"Resultado": "Victoria Local (H)", "Predicho": cal["H"]["predicted_prob"], "Real": cal["H"]["actual_freq"]},
+            {"Resultado": "Empate (D)", "Predicho": cal["D"]["predicted_prob"], "Real": cal["D"]["actual_freq"]},
+            {"Resultado": "Victoria Visitante (A)", "Predicho": cal["A"]["predicted_prob"], "Real": cal["A"]["actual_freq"]},
+        ])
 
-    phase_data = pd.DataFrame([
-        {"Fase": "Clasificación", "Precisión": "~56%", "Nota": "Más predecible — equipos con diferencias claras de nivel"},
-        {"Fase": "Fase de Grupos / Liga", "Precisión": "~61%", "Nota": "Mejor rendimiento — datos suficientes para capturar patrones"},
-        {"Fase": "Eliminatorias", "Precisión": "~46%", "Nota": "Más difícil — partidos cerrados, factor emocional alto"},
-    ])
-    st.dataframe(phase_data, height=145)
+        cal_melted = cal_data.melt(id_vars="Resultado", var_name="Tipo", value_name="Probabilidad")
 
-    # Feature importance (from final model — features ordered by permutation importance)
-    st.subheader("¿Qué factores importan más?")
-    st.markdown("Las 10 variables más importantes del modelo (ordenadas por impacto en la predicción):")
+        chart = alt.Chart(cal_melted).mark_bar().encode(
+            x=alt.X("Tipo:N", title=None, axis=alt.Axis(labelAngle=0)),
+            y=alt.Y("Probabilidad:Q", title="Probabilidad", scale=alt.Scale(domain=[0, 0.6])),
+            color=alt.Color("Tipo:N", scale=alt.Scale(
+                domain=["Predicho", "Real"],
+                range=["#d4af37", "#4CAF50"],
+            )),
+            column=alt.Column("Resultado:N", title=None, header=alt.Header(labelAngle=0)),
+        ).properties(height=300, width=150)
+
+        st.altair_chart(chart)
+
+    # Feature importance (same for all — same 20 features)
+    st.subheader("Que factores importan mas?")
+    st.markdown("Las 10 variables mas importantes del modelo (ordenadas por impacto en la prediccion):")
 
     feat_explanations = {
-        "home_rolling_points": ("Puntos recientes (local)", "La forma reciente del equipo local en Champions League — la variable #1"),
-        "elo_diff": ("Diferencia de ELO", "ELO Rating: Un número que resume la fuerza histórica del equipo. Equipos con más victorias y contra mejores rivales tienen ELO más alto."),
-        "home_domestic_home_goals_avg": ("Goles en casa (liga doméstica)", "Promedio de goles como local en su liga doméstica — indica poder ofensivo en casa"),
-        "elo_home": ("ELO del equipo local", "La fuerza histórica acumulada del equipo local, basada en todos sus resultados pasados"),
-        "elo_away": ("ELO del equipo visitante", "La fuerza histórica acumulada del equipo visitante"),
-        "away_domestic_xg_against_last5": ("xG en contra reciente (liga visitante)", "Goles esperados en contra en los últimos 5 partidos de liga del visitante"),
-        "home_rolling_shots_accuracy": ("Precisión de tiros (local)", "Porcentaje de tiros que van a puerta — eficiencia ofensiva"),
-        "home_rolling_avg_rating": ("Rating promedio (local)", "Calificación promedio de jugadores locales en partidos recientes"),
-        "home_rolling_corners": ("Córners recientes (local)", "Presión ofensiva del equipo local medida en córners"),
-        "home_rolling_duels_won_pct": ("Duelos ganados (local)", "Porcentaje de duelos individuales ganados — intensidad competitiva"),
+        "home_rolling_points": ("Puntos recientes (local)", "La forma reciente del equipo local — la variable #1"),
+        "elo_diff": ("Diferencia de ELO", "ELO Rating: Un numero que resume la fuerza historica del equipo"),
+        "home_domestic_home_goals_avg": ("Goles en casa (liga domestica)", "Promedio de goles como local en su liga domestica"),
+        "elo_home": ("ELO del equipo local", "La fuerza historica acumulada del equipo local"),
+        "elo_away": ("ELO del equipo visitante", "La fuerza historica acumulada del equipo visitante"),
+        "away_domestic_xg_against_last5": ("xG en contra reciente (liga visitante)", "Goles esperados en contra en los ultimos 5 partidos de liga del visitante"),
+        "home_rolling_shots_accuracy": ("Precision de tiros (local)", "Porcentaje de tiros que van a puerta"),
+        "home_rolling_avg_rating": ("Rating promedio (local)", "Calificacion promedio de jugadores locales en partidos recientes"),
+        "home_rolling_corners": ("Corners recientes (local)", "Presion ofensiva del equipo local medida en corners"),
+        "home_rolling_duels_won_pct": ("Duelos ganados (local)", "Porcentaje de duelos individuales ganados"),
         "away_rolling_duels_won_pct": ("Duelos ganados (visitante)", "Porcentaje de duelos individuales ganados por el visitante"),
         "away_rolling_xg_overperformance": ("Sobrerendimiento xG (visitante)", "Diferencia entre goles reales y esperados del visitante"),
         "home_rolling_key_passes": ("Pases clave (local)", "Pases que crean oportunidades de gol"),
-        "home_rolling_pass_accuracy": ("Precisión de pases (local)", "Equipos que conectan pases tienden a controlar partidos"),
+        "home_rolling_pass_accuracy": ("Precision de pases (local)", "Equipos que conectan pases tienden a controlar partidos"),
         "away_rolling_goals_for": ("Goles recientes (visitante)", "El poder ofensivo reciente del equipo visitante"),
         "home_rolling_xg_diff": ("Diferencia xG (local)", "Diferencia entre goles esperados a favor y en contra"),
-        "away_domestic_away_goals_avg": ("Goles de visita (liga doméstica)", "Promedio de goles como visitante en su liga doméstica"),
-        "away_rolling_corners": ("Córners recientes (visitante)", "Presión ofensiva del visitante"),
-        "home_days_since_last": ("Días de descanso (local)", "El descanso entre partidos afecta el rendimiento"),
-        "away_rolling_points": ("Puntos recientes (visitante)", "La forma reciente del visitante en Champions"),
+        "away_domestic_away_goals_avg": ("Goles de visita (liga domestica)", "Promedio de goles como visitante en su liga domestica"),
+        "away_rolling_corners": ("Corners recientes (visitante)", "Presion ofensiva del visitante"),
+        "home_days_since_last": ("Dias de descanso (local)", "El descanso entre partidos afecta el rendimiento"),
+        "away_rolling_points": ("Puntos recientes (visitante)", "La forma reciente del visitante"),
     }
 
-    # feature_list is ordered by importance (from Phase 1 ranking)
     for i, fname in enumerate(feature_list[:10], 1):
         explanation = feat_explanations.get(fname, (fname, ""))
         tag = ""
@@ -761,106 +850,98 @@ with tab3:
         st.caption(explanation[1])
 
 
-# ===== TAB 4: Metodología =====
+# ===== TAB 4: Methodology =====
 with tab4:
-    st.header("Metodología")
+    st.header("Metodologia")
 
     st.subheader("Datos")
     st.markdown("""
-    - **709 partidos** de la UEFA Champions League
-    - **3 temporadas**: 2023, 2024 y 2025
-    - Datos de [API-Football](https://www.api-football.com/) incluyendo estadísticas de partido y rendimiento de jugadores
-    - **ELO ratings** de [clubelo.com](http://clubelo.com/) — ratings históricos de fuerza de cada equipo
-    - **Datos de ligas domésticas** — rendimiento de cada equipo en su liga local
+    - **2,471 partidos** de tres competiciones UEFA
+    - **Champions League:** 709 partidos (3 temporadas: 2023, 2024, 2025)
+    - **Europa League:** 650 partidos (3 temporadas: 2023, 2024, 2025)
+    - **Conference League:** 1,112 partidos (3 temporadas: 2023, 2024, 2025)
+    - Datos de [API-Football](https://www.api-football.com/) incluyendo estadisticas de partido y rendimiento de jugadores
+    - **ELO ratings** de [clubelo.com](http://clubelo.com/) — ratings historicos de fuerza de cada equipo
+    - **Datos de ligas domesticas** — rendimiento de cada equipo en su liga local
     """)
 
-    st.subheader("Variables del modelo (20 seleccionadas)")
+    st.subheader("Por que 3 modelos independientes?")
     st.markdown("""
-    De un universo de 47 variables candidatas, un proceso de selección automatizado eligió las **20 más predictivas**:
+    Experimentamos con un modelo unificado (entrenar con las 3 competiciones), pero **no mejoro** la
+    precision para Champions League. Cada competicion tiene caracteristicas distintas:
 
-    **Champions League (13 variables)** — promedio de los últimos 5 partidos:
-    Puntos (forma), precisión de tiros, rating de jugadores, córners, duelos ganados,
-    sobrerendimiento xG, pases clave, precisión de pases, goles del visitante, diferencia xG,
-    córners del visitante, días de descanso, puntos del visitante
+    - **Champions League** — equipos de elite, partidos cerrados, baja ventaja de local (+15%)
+    - **Europa League** — mayor ventaja de local (+20%), equipos de nivel intermedio
+    - **Conference League** — equipos mas dispares, menos cobertura de datos (ELO: 47%, domestico: 17%)
+
+    Los modelos independientes permiten capturar estas diferencias. Europa League se beneficia
+    de entrenar con datos de Conference League (59.4% accuracy), mientras Conference League
+    necesita datos de todas las competiciones para rendir mejor (transfer learning).
+    """)
+
+    st.subheader("Variables del modelo (20 por competicion)")
+    st.markdown("""
+    Cada modelo usa las mismas **20 variables** seleccionadas por importancia:
+
+    **Competicion europea (13 variables)** — promedio de los ultimos 5 partidos:
+    Puntos (forma), precision de tiros, rating de jugadores, corners, duelos ganados,
+    sobrerendimiento xG, pases clave, precision de pases, goles del visitante, diferencia xG,
+    corners del visitante, dias de descanso, puntos del visitante
 
     **ELO Ratings (3 variables):**
-    Diferencia de ELO (la variable #2 del modelo), ELO del local, ELO del visitante.
-    El ELO resume la fuerza histórica de un equipo — equipos con más victorias
-    contra mejores rivales tienen ELO más alto.
+    Diferencia de ELO (la variable #2 del modelo), ELO del local, ELO del visitante
 
-    **Liga doméstica (4 variables):**
-    Goles en casa, goles de visita, xG en contra, todas de la liga local de cada equipo.
-    Capturan cómo rinde el equipo fuera de Champions League.
-
-    *Las 27 variables descartadas (posesión, intercepciones, tackles, etc.) fueron eliminadas
-    por agregar más ruido que señal con solo 709 partidos de muestra.*
+    **Liga domestica (4 variables):**
+    Goles en casa, goles de visita, xG en contra, todas de la liga local de cada equipo
     """)
 
-    st.subheader("ELO Ratings")
+    st.subheader("Algoritmos")
     st.markdown("""
-    El sistema ELO fue inventado para el ajedrez y adaptado al fútbol por [clubelo.com](http://clubelo.com/).
-    Funciona así:
-
-    - Cada equipo tiene un número (generalmente entre 1200 y 2000)
-    - Ganar contra un equipo fuerte sube mucho tu ELO; ganar contra uno débil sube poco
-    - Perder contra un equipo débil baja mucho tu ELO; perder contra uno fuerte baja poco
-    - El ELO se actualiza después de cada partido
-
-    En nuestro modelo, la **diferencia de ELO** entre los dos equipos es la variable #1 en importancia.
-    Tiene una correlación de +0.49 con el resultado, más alta que cualquier otra variable.
+    | Competicion | Algoritmo | Por que? |
+    |---|---|---|
+    | Champions League | LogReg calibrada (C=0.01, L2) | Mejor precision con pocos datos (709 partidos) |
+    | Europa League | Random Forest (500 arboles) | Se beneficia de mas datos (EL + ECL = 1,762) |
+    | Conference League | Random Forest (500 arboles) | Transfer learning con todas las competiciones |
     """)
 
-    st.subheader("¿Cómo evaluamos el modelo?")
+    st.subheader("Evaluacion: Walk-Forward Validation")
     st.markdown("""
-    Usamos **walk-forward validation**, que simula cómo funcionaría el modelo en la vida real:
+    Simulamos uso real: entrenamos con datos pasados y probamos con datos futuros:
 
     1. Entrenamos con datos de 2023, predecimos inicio de 2024
     2. Entrenamos con datos de 2023 + inicio de 2024, predecimos final de 2024
     3. Entrenamos con datos de 2023 + 2024, predecimos 2025
 
-    Esto es más honesto que mezclar todos los datos aleatoriamente, porque en la realidad no puedes usar datos del futuro para predecir.
+    Esto es mas honesto que mezclar datos aleatoriamente.
     """)
 
-    st.subheader("Evolución del modelo")
+    st.subheader("Evolucion del proyecto")
     st.markdown("""
-    | Versión | Algoritmo | Variables | Precisión | Cambio |
-    |---------|-----------|-----------|-----------|--------|
-    | v1 (base) | Random Forest | 38 (rolling CL) | 51.5% | — |
-    | v2 (+ domestic) | Random Forest | 59 (+ 21 domésticas) | 49.9% | -1.6% (descartado) |
-    | v3 (+ ELO) | Random Forest | 47 (+ 4 ELO + 5 domestic) | 53.7% | +2.2% |
-    | **Final** | **LogReg calibrada** | **20 (seleccionadas)** | **57.2%** | **+5.7%** |
-
-    La v2 demostró que agregar muchas features genera ruido con solo 709 muestras.
-    La v3 incorporó ELO como variable clave. El modelo final aplicó feature selection agresiva (de 47 a 20),
-    hyperparameter tuning, y calibración de probabilidades, logrando el mejor rendimiento.
-    Curiosamente, una Logistic Regression bien tuneada superó a Random Forest y a ensembles más complejos (Stacking, Voting).
+    | Version | Descripcion | Accuracy CL |
+    |---------|-------------|-------------|
+    | v1 (base) | Random Forest, 38 features rolling CL | 51.5% |
+    | v2 (+ domestic) | +21 features domesticas | 49.9% (descartado) |
+    | v3 (+ ELO) | +4 ELO + 5 domestic features | 53.7% |
+    | **v4 (final CL)** | **LogReg calibrada, 20 features** | **57.2%** |
+    | **v5 (multi-comp)** | **+ Europa League + Conference League** | **EL: 59.4%, ECL: 52.7%** |
     """)
 
-    st.subheader("¿Qué NO puede hacer el modelo?")
+    st.subheader("Que NO pueden hacer los modelos?")
     st.markdown("""
-    - **No considera lesiones** ni suspensiones de jugadores
-    - **No sabe de motivación** ni presión de la afición
-    - **No detecta cambios tácticos** ni fichajes recientes
-    - **No tiene información en tiempo real** — se basa en datos históricos
-    - **Predecir empates es muy difícil** — es el resultado más impredecible en fútbol
-    """)
-
-    st.subheader("Modelo técnico")
-    st.markdown(f"""
-    - **Algoritmo:** Logistic Regression calibrada (Platt scaling) con regularización L2 (C=0.01)
-    - **Features:** {metrics_final['n_features']} variables seleccionadas (13 rolling CL + 3 ELO + 4 domésticas)
-    - **Precisión promedio:** {best_acc:.1%} en walk-forward validation
-    - **Log loss:** {best_ll:.3f}
-    - **Mejor que el baseline** (siempre apostar al local: ~50%) por **+{improvement:.0%}**
-    - **Feature selection:** Permutation importance redujo de 47 a 20 variables, eliminando ruido
-    - **Calibración:** Sigmoid (Platt scaling) mejora la calidad de las probabilidades predichas
+    - **No consideran lesiones** ni suspensiones de jugadores
+    - **No saben de motivacion** ni presion de la aficion
+    - **No detectan cambios tacticos** ni fichajes recientes
+    - **No tienen informacion en tiempo real** — se basan en datos historicos
+    - **Predecir empates es muy dificil** — es el resultado mas impredecible en futbol
     """)
 
 
 # Footer
 st.markdown(
     f'<div class="footer-text">'
-    f'Hecho con datos de API-Football y clubelo.com · Modelo final actualizado al {last_date}'
+    f'Hecho con datos de API-Football y clubelo.com · '
+    f'3 modelos: CL 57.2% · EL 59.4% · ECL 52.7% · '
+    f'Actualizado al {last_date}'
     f'</div>',
     unsafe_allow_html=True,
 )

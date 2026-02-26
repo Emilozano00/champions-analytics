@@ -1,0 +1,22 @@
+[
+  "home_rolling_points",
+  "elo_diff",
+  "home_domestic_home_goals_avg",
+  "elo_home",
+  "elo_away",
+  "away_domestic_xg_against_last5",
+  "home_rolling_shots_accuracy",
+  "home_rolling_avg_rating",
+  "home_rolling_corners",
+  "home_rolling_duels_won_pct",
+  "away_rolling_duels_won_pct",
+  "away_rolling_xg_overperformance",
+  "home_rolling_key_passes",
+  "home_rolling_pass_accuracy",
+  "away_rolling_goals_for",
+  "home_rolling_xg_diff",
+  "away_domestic_away_goals_avg",
+  "away_rolling_corners",
+  "home_days_since_last",
+  "away_rolling_points"
+]

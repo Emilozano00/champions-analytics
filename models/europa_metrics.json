@@ -1,0 +1,72 @@
+{
+  "competition": "europa",
+  "best_variant": "B: EL+ECL\u2192eval EL",
+  "best_model": "RF",
+  "accuracy": 0.5937,
+  "log_loss": 0.9477,
+  "f1_macro": 0.4138,
+  "n_matches_train": 650,
+  "n_features": 20,
+  "all_results": {
+    "A: Solo EL": {
+      "LogReg": {
+        "accuracy": 0.5577,
+        "log_loss": 0.9778,
+        "f1_macro": 0.3736,
+        "n_splits": 3
+      },
+      "RF": {
+        "accuracy": 0.5596,
+        "log_loss": 0.9794,
+        "f1_macro": 0.3728,
+        "n_splits": 3
+      },
+      "HGB": {
+        "accuracy": 0.5246,
+        "log_loss": 1.0097,
+        "f1_macro": 0.2883,
+        "n_splits": 3
+      }
+    },
+    "B: EL+ECL\u2192eval EL": {
+      "LogReg": {
+        "accuracy": 0.5838,
+        "log_loss": 0.9565,
+        "f1_macro": 0.4313,
+        "n_splits": 3
+      },
+      "RF": {
+        "accuracy": 0.5937,
+        "log_loss": 0.9477,
+        "f1_macro": 0.4138,
+        "n_splits": 3
+      },
+      "HGB": {
+        "accuracy": 0.5365,
+        "log_loss": 0.9852,
+        "f1_macro": 0.3193,
+        "n_splits": 3
+      }
+    },
+    "C: ALL\u2192eval EL": {
+      "LogReg": {
+        "accuracy": 0.5725,
+        "log_loss": 0.9515,
+        "f1_macro": 0.3941,
+        "n_splits": 3
+      },
+      "RF": {
+        "accuracy": 0.5777,
+        "log_loss": 0.9545,
+        "f1_macro": 0.4075,
+        "n_splits": 3
+      },
+      "HGB": {
+        "accuracy": 0.5103,
+        "log_loss": 0.9838,
+        "f1_macro": 0.3189,
+        "n_splits": 3
+      }
+    }
+  }
+}
