@@ -115,14 +115,20 @@ def load_upcoming_matches():
     """Load upcoming fixtures from 11_update_fixtures.py output (all competitions)."""
     path = PROCESSED_DIR / "upcoming_matches.csv"
     if path.exists():
-        df = pd.read_csv(path)
+        try:
+            df = pd.read_csv(path)
+        except pd.errors.EmptyDataError:
+            return pd.DataFrame()
         if len(df) > 0:
             df["date"] = pd.to_datetime(df["date"])
         return df
     # Fallback to old format
     path_old = PROCESSED_DIR / "upcoming.csv"
     if path_old.exists():
-        df = pd.read_csv(path_old)
+        try:
+            df = pd.read_csv(path_old)
+        except pd.errors.EmptyDataError:
+            return pd.DataFrame()
         if len(df) > 0:
             df["date"] = pd.to_datetime(df["date"])
             df["league_name"] = "Champions League"
@@ -136,7 +142,10 @@ def load_recent_results():
     """Load recent results from 11_update_fixtures.py output (all competitions)."""
     path = PROCESSED_DIR / "recent_results.csv"
     if path.exists():
-        df = pd.read_csv(path)
+        try:
+            df = pd.read_csv(path)
+        except pd.errors.EmptyDataError:
+            return pd.DataFrame()
         if len(df) > 0:
             df["date"] = pd.to_datetime(df["date"])
         return df
@@ -148,7 +157,12 @@ def load_odds():
     path = PROCESSED_DIR / "odds.csv"
     if not path.exists():
         return {}
-    df = pd.read_csv(path)
+    try:
+        df = pd.read_csv(path)
+    except pd.errors.EmptyDataError:
+        return {}
+    if len(df) == 0:
+        return {}
     odds = {}
     for _, row in df.iterrows():
         odds[int(row["fixture_id"])] = {
