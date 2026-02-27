@@ -23,32 +23,24 @@
     "home_days_since_last",
     "away_rolling_points"
   ],
-  "accuracy": 0.5721,
-  "log_loss": 0.9331,
-  "f1_macro": 0.4029,
-  "delta_accuracy_vs_v3": 0.0352,
-  "delta_log_loss_vs_v3": -0.0334,
-  "training_accuracy": 0.5839,
-  "best_params": {
-    "Random Forest": "{'clf__class_weight': None, 'clf__max_depth': 15, 'clf__min_samples_leaf': 5, 'clf__n_estimators': 200}",
-    "HistGradientBoosting": "{'clf__learning_rate': 0.01, 'clf__max_depth': 3, 'clf__max_iter': 200, 'clf__min_samples_leaf': 10}",
-    "Logistic Regression": "{'clf__C': 0.01, 'clf__class_weight': None, 'clf__penalty': 'l2'}"
-  },
+  "accuracy": 0.5823,
+  "log_loss": 0.9377,
+  "f1_macro": 0.4096,
   "per_split": [
     {
-      "accuracy": 0.5597014925373134,
-      "log_loss": 0.951368123854506,
-      "f1_macro": 0.3988641648919244
+      "accuracy": 0.5895522388059702,
+      "log_loss": 0.9527927695416613,
+      "f1_macro": 0.42178094167603347
     },
     {
-      "accuracy": 0.5851851851851851,
-      "log_loss": 0.893323093046734,
-      "f1_macro": 0.4078674948240166
+      "accuracy": 0.5777777777777777,
+      "log_loss": 0.9067284845231343,
+      "f1_macro": 0.40125717903495683
     },
     {
-      "accuracy": 0.5714285714285714,
-      "log_loss": 0.9544701189909103,
-      "f1_macro": 0.4019871023481132
+      "accuracy": 0.5795918367346938,
+      "log_loss": 0.9536577996737771,
+      "f1_macro": 0.405745521166524
     }
   ]
 }

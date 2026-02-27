@@ -1,72 +1,10 @@
 {
   "competition": "conference",
-  "best_variant": "C: ALL\u2192eval ECL",
   "best_model": "RF",
-  "accuracy": 0.5272,
-  "log_loss": 1.0016,
-  "f1_macro": 0.367,
-  "n_matches_train": 1112,
-  "n_features": 20,
-  "all_results": {
-    "A: Solo ECL": {
-      "LogReg": {
-        "accuracy": 0.5229,
-        "log_loss": 1.0123,
-        "f1_macro": 0.3536,
-        "n_splits": 3
-      },
-      "RF": {
-        "accuracy": 0.5159,
-        "log_loss": 1.0039,
-        "f1_macro": 0.3586,
-        "n_splits": 3
-      },
-      "HGB": {
-        "accuracy": 0.4941,
-        "log_loss": 1.015,
-        "f1_macro": 0.3069,
-        "n_splits": 3
-      }
-    },
-    "B: ECL+EL\u2192eval ECL": {
-      "LogReg": {
-        "accuracy": 0.5123,
-        "log_loss": 1.0145,
-        "f1_macro": 0.3584,
-        "n_splits": 3
-      },
-      "RF": {
-        "accuracy": 0.5222,
-        "log_loss": 1.0016,
-        "f1_macro": 0.3597,
-        "n_splits": 3
-      },
-      "HGB": {
-        "accuracy": 0.5086,
-        "log_loss": 1.0086,
-        "f1_macro": 0.3116,
-        "n_splits": 3
-      }
-    },
-    "C: ALL\u2192eval ECL": {
-      "LogReg": {
-        "accuracy": 0.508,
-        "log_loss": 1.0115,
-        "f1_macro": 0.3587,
-        "n_splits": 3
-      },
-      "RF": {
-        "accuracy": 0.5272,
-        "log_loss": 1.0016,
-        "f1_macro": 0.367,
-        "n_splits": 3
-      },
-      "HGB": {
-        "accuracy": 0.5045,
-        "log_loss": 1.0057,
-        "f1_macro": 0.3238,
-        "n_splits": 3
-      }
-    }
-  }
+  "best_variant": "C: ALL\u2192eval ECL",
+  "accuracy": 0.5166,
+  "log_loss": 1.0,
+  "f1_macro": 0.359,
+  "n_matches_train": 1119,
+  "n_features": 20
 }
