@@ -2,9 +2,9 @@
   "competition": "europa",
   "best_model": "RF",
   "best_variant": "B: EL+ECL\u2192eval EL",
-  "accuracy": 0.5891,
-  "log_loss": 0.9488,
-  "f1_macro": 0.4085,
+  "accuracy": 0.5939,
+  "log_loss": 0.9492,
+  "f1_macro": 0.414,
   "n_matches_train": 655,
   "n_features": 20
 }
